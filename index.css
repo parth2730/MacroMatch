@@ -1,12 +1,9 @@
-/* -------------------------
-   Basic setup
-------------------------- */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 
 :root {
     --bg-color: #0b0d0c;
@@ -19,12 +16,15 @@
     --green: #c7f35b;
 }
 
+
 html {
     scroll-behavior: smooth;
 }
 
+
 body {
     background-color: var(--bg-color);
+
     color: var(--main-text);
 
     font-family: Arial, sans-serif;
@@ -33,9 +33,9 @@ body {
 }
 
 
-/* -------------------------
+/* =========================
    Navbar
-------------------------- */
+========================= */
 
 .navbar {
     display: flex;
@@ -54,14 +54,21 @@ body {
     z-index: 10;
 }
 
+
 .logo {
     display: flex;
     align-items: center;
+
     gap: 9px;
 
     font-size: 19px;
     font-weight: bold;
+
+    text-decoration: none;
+
+    color: var(--main-text);
 }
+
 
 .logo-mark {
     width: 31px;
@@ -72,15 +79,18 @@ body {
     justify-content: center;
 
     background-color: var(--green);
+
     color: #0b0d0c;
 
     border-radius: 8px;
 }
 
+
 .nav-links {
     display: flex;
     gap: 28px;
 }
+
 
 .nav-links a {
     color: var(--light-text);
@@ -90,19 +100,17 @@ body {
     font-size: 14px;
 }
 
+
 .nav-links a:hover {
     color: var(--main-text);
 }
+
 
 .nav-actions {
     display: flex;
     gap: 8px;
 }
 
-
-/* -------------------------
-   Buttons
-------------------------- */
 
 .btn {
     padding: 10px 17px;
@@ -116,23 +124,30 @@ body {
     cursor: pointer;
 }
 
+
 .btn-primary {
     background-color: var(--green);
+
     color: #0b0d0c;
 }
+
 
 .btn-primary:hover {
     background-color: #d5ff73;
 }
 
+
 .btn-login {
     background: transparent;
+
     color: var(--light-text);
 }
+
 
 .btn-login:hover {
     color: var(--main-text);
 }
+
 
 .btn-secondary {
     background-color: var(--card-color);
@@ -142,18 +157,74 @@ body {
     border: 1px solid var(--border-color);
 }
 
+
 .btn-secondary:hover {
     border-color: #454b46;
 }
+
 
 .btn-large {
     padding: 13px 20px;
 }
 
 
-/* -------------------------
-   Hero section
-------------------------- */
+
+
+.footer {
+    padding: 25px 7%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-top: 1px solid var(--border-color);
+}
+
+
+.footer p {
+    color: var(--light-text);
+
+    font-size: 13px;
+}
+
+
+
+
+@media (max-width: 850px) {
+
+    .nav-links {
+        display: none;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .navbar {
+        padding: 16px 5%;
+    }
+
+
+    .nav-actions .btn-login {
+        display: none;
+    }
+
+
+    .footer {
+        padding: 25px 5%;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 12px;
+    }
+
+}
+
 
 .hero {
     min-height: 650px;
@@ -161,6 +232,7 @@ body {
     padding: 90px 7%;
 
     display: grid;
+
     grid-template-columns: 1.1fr 0.9fr;
 
     align-items: center;
@@ -168,18 +240,23 @@ body {
     gap: 60px;
 }
 
+
 .hero-content {
     max-width: 700px;
 }
 
+
 .hero-badge {
     display: inline-flex;
+
     align-items: center;
+
     gap: 8px;
 
     padding: 6px 11px;
 
     border: 1px solid var(--border-color);
+
     border-radius: 20px;
 
     color: var(--light-text);
@@ -188,6 +265,7 @@ body {
 
     margin-bottom: 24px;
 }
+
 
 .status-dot {
     width: 7px;
@@ -198,6 +276,7 @@ body {
     border-radius: 50%;
 }
 
+
 .hero h1 {
     font-size: clamp(45px, 6vw, 76px);
 
@@ -206,9 +285,11 @@ body {
     letter-spacing: -2px;
 }
 
+
 .hero h1 span {
     color: var(--green);
 }
+
 
 .hero-text {
     max-width: 540px;
@@ -220,17 +301,17 @@ body {
     font-size: 16px;
 }
 
+
 .hero-buttons {
     display: flex;
+
     gap: 10px;
 
     margin-top: 30px;
 }
 
 
-/* -------------------------
-   Macro preview card
-------------------------- */
+
 
 .macro-preview {
     padding: 24px;
@@ -242,12 +323,15 @@ body {
     border-radius: 20px;
 }
 
+
 .preview-header {
     display: flex;
+
     justify-content: space-between;
 
     margin-bottom: 20px;
 }
+
 
 .small-label {
     color: var(--light-text);
@@ -257,17 +341,20 @@ body {
     letter-spacing: 1px;
 }
 
+
 .preview-header h3 {
     margin-top: 4px;
 
     font-size: 20px;
 }
 
+
 .preview-icon {
     width: 36px;
     height: 36px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -277,6 +364,7 @@ body {
 
     border-radius: 9px;
 }
+
 
 .calorie-box {
     padding: 18px;
@@ -288,6 +376,7 @@ body {
     border-radius: 14px;
 }
 
+
 .calorie-box span {
     display: block;
 
@@ -296,22 +385,27 @@ body {
     font-size: 12px;
 }
 
+
 .calorie-box strong {
     font-size: 40px;
 }
+
 
 .calorie-box small {
     color: var(--light-text);
 }
 
+
 .macro-grid {
     display: grid;
+
     grid-template-columns: repeat(3, 1fr);
 
     gap: 10px;
 
     margin-top: 10px;
 }
+
 
 .macro-card {
     padding: 14px;
@@ -323,15 +417,19 @@ body {
     border-radius: 12px;
 }
 
+
 .macro-top {
     display: flex;
+
     align-items: center;
+
     gap: 6px;
 
     color: var(--light-text);
 
     font-size: 11px;
 }
+
 
 .macro-card strong {
     display: block;
@@ -341,6 +439,7 @@ body {
     font-size: 19px;
 }
 
+
 .macro-dot {
     width: 6px;
     height: 6px;
@@ -348,24 +447,30 @@ body {
     border-radius: 50%;
 }
 
+
 .protein {
     background-color: var(--green);
 }
+
 
 .carbs {
     background-color: #69bfff;
 }
 
+
 .fat {
     background-color: #ffb35c;
 }
+
 
 .match-preview {
     margin-top: 18px;
 }
 
+
 .match-info {
     display: flex;
+
     justify-content: space-between;
 
     color: var(--light-text);
@@ -373,9 +478,11 @@ body {
     font-size: 12px;
 }
 
+
 .match-info strong {
     color: var(--green);
 }
+
 
 .progress-bar {
     height: 6px;
@@ -387,6 +494,7 @@ body {
     border-radius: 10px;
 }
 
+
 .progress-fill {
     width: 97.8%;
     height: 100%;
@@ -397,9 +505,6 @@ body {
 }
 
 
-/* -------------------------
-   Common section styling
-------------------------- */
 
 .section {
     padding: 90px 7%;
@@ -407,11 +512,13 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
+
 .section-heading {
     max-width: 650px;
 
     margin-bottom: 45px;
 }
+
 
 .section-label {
     color: var(--green);
@@ -423,6 +530,7 @@ body {
     letter-spacing: 1.5px;
 }
 
+
 .section-heading h2 {
     margin-top: 10px;
 
@@ -431,9 +539,11 @@ body {
     line-height: 1.1;
 }
 
+
 .section-heading h2 span {
     color: var(--green);
 }
+
 
 .section-heading p {
     margin-top: 15px;
@@ -442,9 +552,6 @@ body {
 }
 
 
-/* -------------------------
-   How it works
-------------------------- */
 
 .steps {
     display: grid;
@@ -453,6 +560,7 @@ body {
 
     gap: 15px;
 }
+
 
 .step-card {
     min-height: 220px;
@@ -466,6 +574,7 @@ body {
     border-radius: 18px;
 }
 
+
 .step-number {
     color: var(--green);
 
@@ -474,11 +583,13 @@ body {
     font-weight: bold;
 }
 
+
 .step-card h3 {
     margin-top: 45px;
 
     font-size: 21px;
 }
+
 
 .step-card p {
     margin-top: 8px;
@@ -489,9 +600,7 @@ body {
 }
 
 
-/* -------------------------
-   Features
-------------------------- */
+
 
 .features {
     display: grid;
@@ -500,6 +609,7 @@ body {
 
     gap: 15px;
 }
+
 
 .feature-card {
     min-height: 240px;
@@ -513,15 +623,18 @@ body {
     border-radius: 18px;
 }
 
+
 .feature-large {
     background-color: #151914;
 }
+
 
 .feature-icon {
     width: 40px;
     height: 40px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -534,11 +647,13 @@ body {
     font-size: 19px;
 }
 
+
 .feature-card h3 {
     margin-top: 40px;
 
     font-size: 20px;
 }
+
 
 .feature-card p {
     margin-top: 8px;
@@ -548,14 +663,17 @@ body {
     font-size: 14px;
 }
 
+
 .feature-demo {
     display: flex;
+
     flex-wrap: wrap;
 
     gap: 7px;
 
     margin-top: 20px;
 }
+
 
 .feature-demo span {
     padding: 5px 8px;
@@ -572,9 +690,6 @@ body {
 }
 
 
-/* -------------------------
-   Bottom CTA
-------------------------- */
 
 .cta-section {
     margin: 30px 7% 80px;
@@ -582,7 +697,9 @@ body {
     padding: 55px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     gap: 30px;
@@ -594,6 +711,7 @@ body {
     border-radius: 20px;
 }
 
+
 .cta-section h2 {
     margin-top: 8px;
 
@@ -602,41 +720,15 @@ body {
     line-height: 1.05;
 }
 
+
 .cta-section h2 span {
     color: var(--green);
 }
 
 
-/* -------------------------
-   Footer
-------------------------- */
 
-.footer {
-    padding: 25px 7%;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    border-top: 1px solid var(--border-color);
-}
-
-.footer p {
-    color: var(--light-text);
-
-    font-size: 13px;
-}
-
-
-/* -------------------------
-   Mobile
-------------------------- */
 
 @media (max-width: 850px) {
-
-    .nav-links {
-        display: none;
-    }
 
     .hero {
         grid-template-columns: 1fr;
@@ -644,49 +736,50 @@ body {
         padding-top: 65px;
     }
 
+
     .steps {
         grid-template-columns: 1fr;
     }
 
+
     .features {
         grid-template-columns: 1fr;
     }
+
 }
 
 
 @media (max-width: 600px) {
 
-    .navbar {
-        padding: 16px 5%;
-    }
-
-    .nav-actions .btn-login {
-        display: none;
-    }
-
     .hero {
         padding: 60px 5%;
     }
+
 
     .hero h1 {
         font-size: 47px;
     }
 
+
     .hero-buttons {
         flex-direction: column;
     }
+
 
     .macro-grid {
         grid-template-columns: 1fr;
     }
 
+
     .section {
         padding: 70px 5%;
     }
 
+
     .section-heading h2 {
         font-size: 34px;
     }
+
 
     .cta-section {
         margin: 20px 5% 60px;
@@ -698,17 +791,9 @@ body {
         align-items: flex-start;
     }
 
+
     .cta-section h2 {
         font-size: 34px;
     }
 
-    .footer {
-        padding: 25px 5%;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 12px;
-    }
 }

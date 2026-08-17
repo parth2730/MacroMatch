@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MacroMatch</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-color: #0b0d0c;
+            --card-color: #141715;
+            --border-color: #292e2a;
+            --main-text: #f4f5f2;
+            --light-text: #999f99;
+            --green: #c7f35b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--main-text);
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 7%;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background-color: rgba(11, 13, 12, 0.95);
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 19px;
+            font-weight: bold;
+            text-decoration: none;
+            color: var(--main-text);
+        }
+
+        .logo-mark {
+            width: 31px;
+            height: 31px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--green);
+            color: #0b0d0c;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: var(--main-text);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 10px 17px;
+            border: none;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--green);
+            color: #0b0d0c;
+        }
+
+        .btn-primary:hover {
+            background-color: #d5ff73;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: var(--light-text);
+        }
+
+        .btn-login:hover {
+            color: var(--main-text);
+        }
+
+        .section-label {
+            color: var(--green);
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .auth-section {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 70px 5%;
+        }
+
+        .auth-box {
+            width: 100%;
+            max-width: 480px;
+            padding: 40px;
+            background-color: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+        }
+
+        .auth-heading {
+            margin-bottom: 30px;
+        }
+
+        .auth-heading h2 {
+            margin-top: 8px;
+            font-size: 36px;
+            line-height: 1.1;
+        }
+
+        .auth-heading h2 span {
+            color: var(--green);
+        }
+
+        .auth-heading p {
+            margin-top: 12px;
+            color: var(--light-text);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 14px;
+            background-color: #0f110f;
+            color: var(--main-text);
+            border: 1px solid var(--border-color);
+            border-radius: 9px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--green);
+        }
+
+        .form-group input::placeholder {
+            color: #686e68;
+        }
+
+        .auth-button {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .auth-switch {
+            margin-top: 22px;
+            text-align: center;
+            color: var(--light-text);
+            font-size: 13px;
+        }
+
+        .auth-switch button {
+            padding: 0;
+            border: none;
+            background: none;
+            color: var(--green);
+            font-family: inherit;
+            font-size: inherit;
+            cursor: pointer;
+        }
+
+        .auth-switch button:hover {
+            text-decoration: underline;
+        }
+
+        .back-button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 0;
+            border: none;
+            background: none;
+            color: var(--light-text);
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            color: var(--main-text);
+        }
+
+        .form-message {
+            min-height: 20px;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #ff6b6b;
+        }
+
+        .success-message {
+            color: var(--green);
+        }
+
+        .footer {
+            padding: 25px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer p {
+            color: var(--light-text);
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 5%;
+            }
+
+            .nav-actions .btn-login {
+                display: none;
+            }
+
+            .auth-box {
+                padding: 28px 22px;
+            }
+
+            .auth-heading h2 {
+                font-size: 31px;
+            }
+
+            .footer {
+                padding: 25px 5%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="index.html#how-it-works">How it works</a>
+            <a href="index.html#features">Features</a>
+        </nav>
+
+        <div class="nav-actions">
+            <button class="btn btn-login">Login</button>
+            <button class="btn btn-primary">Get Started</button>
+        </div>
+    </header>
+
+    <main>
+        <section class="auth-section" id="login-section">
+            <div class="auth-box">
+
+                <div class="auth-heading">
+                    <span class="section-label">WELCOME BACK</span>
+
+                    <h2>
+                        Login to <span>MacroMatch.</span>
+                    </h2>
+
+                    <p>
+                        Continue planning meals that fit your nutrition goals.
+                    </p>
+                </div>
+
+                <form id="login-form">
+
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input
+                            type="email"
+                            id="login-email"
+                            placeholder="Enter your email"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input
+                            type="password"
+                            id="login-password"
+                            placeholder="Enter your password"
+                        >
+                    </div>
+
+                    <p class="form-message" id="login-message"></p>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary auth-button"
+                    >
+                        Login
+                    </button>
+
+                </form>
+
+                <p class="auth-switch">
+                    Don't have an account?
+                    <button type="button" id="show-signup">
+                        Create account
+                    </button>
+                </p>
+
+                <button
+                    type="button"
+                    class="back-button"
+                    id="back-from-login"
+                >
+                    ← Back to home
+                </button>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </div>
+
+        <p>
+            Reverse your macros. Build your meal.
+        </p>
+    </footer>
+
+    <script>
+        const loginButton = document.querySelector(".btn-login");
+        const getStartedButton = document.querySelector(".nav-actions .btn-primary");
+
+        if (loginButton) {
+            loginButton.addEventListener("click", function() {
+                window.location.href = "login.html";
+            });
+        }
+
+        if (getStartedButton) {
+            getStartedButton.addEventListener("click", function() {
+                window.location.href = "signup.html";
+            });
+        }
+
+        const showSignupButton = document.getElementById("show-signup");
+        const backFromLogin = document.getElementById("back-from-login");
+
+        if (showSignupButton) {
+            showSignupButton.addEventListener("click", function() {
+                window.location.href = "signup.html";
+            });
+        }
+
+        if (backFromLogin) {
+            backFromLogin.addEventListener("click", function() {
+                window.location.href = "index.html";
+            });
+        }
+
+        const loginForm = document.getElementById("login-form");
+        const loginMessage = document.getElementById("login-message");
+
+        function isValidEmail(email) {
+            return email.includes("@") && email.includes(".");
+        }
+
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("login-email").value.trim();
+            const password = document.getElementById("login-password").value;
+
+            loginMessage.textContent = "";
+            loginMessage.classList.remove("success-message");
+
+            if (email === "") {
+                loginMessage.textContent = "Please enter your email.";
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                loginMessage.textContent = "Please enter a valid email address.";
+                return;
+            }
+
+            if (password === "") {
+                loginMessage.textContent = "Please enter your password.";
+                return;
+            }
+
+            loginMessage.textContent = "Login details are valid!";
+            loginMessage.classList.add("success-message");
+        });
+    </script>
+
+</body>
+</html>
