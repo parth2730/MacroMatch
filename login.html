@@ -419,6 +419,18 @@
             return email.includes("@") && email.includes(".");
         }
 
+        var USERS_KEY = "mm_users";
+
+        function getUsers() {
+            try {
+                var raw = localStorage.getItem(USERS_KEY);
+                var parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (err) {
+                return [];
+            }
+        }
+
         loginForm.addEventListener("submit", function(event) {
             event.preventDefault();
 
@@ -443,8 +455,37 @@
                 return;
             }
 
-            loginMessage.textContent = "Login details are valid!";
+            var users = getUsers();
+            var matchedUser = users.find(function (u) {
+                return u.email.toLowerCase() === email.toLowerCase();
+            });
+
+            if (!matchedUser) {
+                loginMessage.textContent = "No account found with this email. Please sign up first.";
+                return;
+            }
+
+            if (matchedUser.password !== password) {
+                loginMessage.textContent = "Incorrect password. Please try again.";
+                return;
+            }
+
+            loginMessage.textContent = "Login successful! Redirecting...";
             loginMessage.classList.add("success-message");
+
+            try {
+                localStorage.setItem("mm_current_user", JSON.stringify({
+                    name: matchedUser.name,
+                    email: matchedUser.email,
+                    loggedInAt: new Date().toISOString()
+                }));
+            } catch (err) {
+                console.warn("Could not persist session to LocalStorage.", err);
+            }
+
+            setTimeout(function () {
+                window.location.href = "dashboard.html";
+            }, 500);
         });
     </script>
 

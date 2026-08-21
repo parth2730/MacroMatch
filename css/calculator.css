@@ -1,0 +1,495 @@
+/* =========================================================
+   calculator.css
+   ========================================================= */
+
+.calc-main {
+    padding: 40px 7% 90px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.calc-grid {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* ---------------- Left panel ---------------- */
+
+.calc-panel {
+    padding: 26px;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    position: sticky;
+    top: 90px;
+}
+
+.target-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.target-header h2 {
+    font-size: 19px;
+}
+
+.edit-goal-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--light-text);
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.edit-goal-btn:hover {
+    color: var(--main-text);
+    border-color: #454b46;
+}
+
+.target-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.target-box {
+    padding: 14px;
+    background-color: var(--green-dim);
+    border-radius: 12px;
+}
+
+.target-box span {
+    display: block;
+    color: #b7d999;
+    font-size: 11px;
+}
+
+.target-box strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 18px;
+    color: var(--main-text);
+}
+
+.goal-editor {
+    margin-bottom: 22px;
+    padding: 16px;
+    background-color: var(--card-color-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+}
+
+.goal-editor .btn {
+    margin-top: 6px;
+    width: 100%;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 6px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: var(--light-text);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 13px;
+    background-color: var(--card-color-alt);
+    color: var(--main-text);
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    font-size: 14px;
+    outline: none;
+    font-family: inherit;
+}
+
+.input-group input:focus {
+    border-color: var(--green);
+}
+
+.field-error {
+    min-height: 18px;
+    margin: 6px 0 4px;
+    color: var(--red);
+    font-size: 12px;
+}
+
+.selector-group {
+    margin: 18px 0;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.field-label strong {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pill {
+    padding: 9px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-color-alt);
+    color: var(--main-text);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.pill:hover {
+    border-color: #454b46;
+}
+
+.pill.active {
+    background-color: var(--green);
+    color: #0b0d0c;
+    border-color: var(--green);
+    font-weight: 600;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--green);
+    height: 6px;
+}
+
+.tolerance-note {
+    margin-bottom: 16px;
+    color: var(--light-text);
+    font-size: 12px;
+}
+
+.diet-hint {
+    margin-top: 8px;
+    color: var(--light-text);
+    font-size: 12px;
+}
+
+.pantry-card {
+    display: block;
+    padding: 16px;
+    margin-bottom: 20px;
+    background-color: var(--card-color-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.pantry-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.pantry-card-top input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--green);
+}
+
+.pantry-card p {
+    margin-top: 6px;
+    color: var(--light-text);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.pantry-manage-btn {
+    margin-top: 10px;
+    background: transparent;
+    border: none;
+    color: var(--green);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.generate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 15px;
+}
+
+.generate-icon {
+    font-size: 15px;
+}
+
+/* ---------------- Right panel: states ---------------- */
+
+.calc-results {
+    min-height: calc(100vh - 230px);
+    display: flex;
+    flex-direction: column;
+}
+
+.state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    min-height: calc(100vh - 230px);
+    padding: 40px;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+}
+
+.state[hidden] {
+    display: none !important;
+}
+
+.state-icon {
+    font-size: 40px;
+    margin-bottom: 18px;
+}
+
+.state h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.state p {
+    max-width: 440px;
+    color: var(--light-text);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ---------------- Result cards ---------------- */
+
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.results-list[hidden] {
+    display: none !important;
+}
+
+.result-card {
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.result-card.best-match {
+    border-color: var(--green);
+    box-shadow: 0 0 0 1px var(--green), 0 20px 50px rgba(199, 243, 91, 0.06);
+}
+
+.result-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 22px;
+    background-color: var(--green-dim);
+}
+
+.result-card.best-match .result-card-header {
+    background-color: rgba(199, 243, 91, 0.14);
+}
+
+.rank-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tolerance-badge {
+    padding: 5px 12px;
+    background-color: var(--green);
+    color: #0b0d0c;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.tolerance-badge.outside {
+    background-color: var(--card-color-alt);
+    color: var(--orange);
+    border: 1px solid var(--border-color);
+}
+
+.result-card-body {
+    padding: 22px;
+}
+
+.result-card-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.result-card-title-row h3 {
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.result-card-title-row .meta {
+    margin-top: 5px;
+    color: var(--light-text);
+    font-size: 13px;
+}
+
+.match-score {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.match-score strong {
+    display: block;
+    font-size: 28px;
+    color: var(--green);
+    line-height: 1;
+}
+
+.match-score span {
+    display: block;
+    margin-top: 4px;
+    color: var(--light-text);
+    font-size: 11px;
+}
+
+.item-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background-color: var(--green-dim);
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.item-row .item-qty {
+    color: #b7d999;
+    font-weight: 600;
+}
+
+.macro-totals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.macro-total-box {
+    padding: 12px;
+    text-align: center;
+    background-color: var(--card-color-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.macro-total-box strong {
+    display: block;
+    font-size: 18px;
+}
+
+.macro-total-box span {
+    display: block;
+    margin-top: 3px;
+    color: var(--light-text);
+    font-size: 11px;
+}
+
+.macro-total-box.cal strong { color: var(--green); }
+.macro-total-box.protein strong { color: var(--blue); }
+.macro-total-box.carbs strong { color: var(--orange); }
+.macro-total-box.fat strong { color: var(--red); }
+
+.result-card-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.save-meal-btn.saved {
+    background-color: var(--green-dim);
+    color: var(--green);
+    border-color: var(--green);
+}
+
+.add-log-btn.added {
+    background-color: var(--card-color-alt);
+    color: var(--green);
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 1050px) {
+    .calc-grid {
+        grid-template-columns: 1fr;
+    }
+    .calc-panel {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .calc-main {
+        padding: 30px 5% 70px;
+    }
+    .input-grid {
+        grid-template-columns: 1fr;
+    }
+    .target-summary {
+        grid-template-columns: 1fr 1fr;
+    }
+    .macro-totals {
+        grid-template-columns: 1fr 1fr;
+    }
+    .result-card-title-row {
+        flex-direction: column;
+    }
+    .match-score {
+        text-align: left;
+    }
+}
