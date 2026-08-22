@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Calculator - MacroMatch</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/calculator.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </a>
+        <nav class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="calculator.html" class="active">Meal Calculator</a>
+            <a href="foods.html">Food Explorer</a>
+        </nav>
+        <div class="nav-actions">
+            <span class="nav-user" id="nav-user"></span>
+            <button class="btn btn-secondary" id="logout-btn">Log out</button>
+        </div>
+    </header>
+
+    <main class="calc-main">
+
+        <div class="calc-grid">
+
+            <!-- ============ LEFT: Controls ============ -->
+            <section class="calc-panel">
+
+                <div class="target-header">
+                    <h2>Your remaining target today</h2>
+                    <button class="edit-goal-btn" id="edit-goal-btn">Edit goal</button>
+                </div>
+
+                <div class="target-summary">
+                    <div class="target-box">
+                        <span>Calories</span>
+                        <strong id="remaining-calories">0 kcal</strong>
+                    </div>
+                    <div class="target-box">
+                        <span>Protein</span>
+                        <strong id="remaining-protein">0 g</strong>
+                    </div>
+                    <div class="target-box">
+                        <span>Carbs</span>
+                        <strong id="remaining-carbs">0 g</strong>
+                    </div>
+                    <div class="target-box">
+                        <span>Fat</span>
+                        <strong id="remaining-fat">0 g</strong>
+                    </div>
+                </div>
+
+                <!-- Inline goal editor (hidden by default) -->
+                <div class="goal-editor" id="goal-editor" hidden>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="goal-calories">Daily calories (kcal)</label>
+                            <input type="number" id="goal-calories" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="goal-protein">Daily protein (g)</label>
+                            <input type="number" id="goal-protein" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="goal-carbs">Daily carbs (g)</label>
+                            <input type="number" id="goal-carbs" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="goal-fat">Daily fat (g)</label>
+                            <input type="number" id="goal-fat" min="0">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="save-goal-btn">Save goal</button>
+                </div>
+
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="input-calories">Calories (kcal)</label>
+                        <input type="number" id="input-calories" placeholder="e.g. 414" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input-protein">Protein (g)</label>
+                        <input type="number" id="input-protein" placeholder="e.g. 28" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input-carbs">Carbs (g)</label>
+                        <input type="number" id="input-carbs" placeholder="e.g. 46" min="0">
+                    </div>
+                    <div class="input-group">
+                        <label for="input-fat">Fat (g)</label>
+                        <input type="number" id="input-fat" placeholder="e.g. 13" min="0">
+                    </div>
+                </div>
+
+                <p class="field-error" id="input-error"></p>
+
+                <div class="selector-group">
+                    <span class="field-label">Meal type</span>
+                    <div class="pill-row" id="meal-type-row">
+                        <button class="pill" data-value="breakfast">Breakfast</button>
+                        <button class="pill active" data-value="lunch">Lunch</button>
+                        <button class="pill" data-value="dinner">Dinner</button>
+                        <button class="pill" data-value="snack">Snack</button>
+                    </div>
+                </div>
+
+                <div class="selector-group">
+                    <span class="field-label">Diet</span>
+                    <div class="pill-row" id="diet-row">
+                        <button class="pill active" data-value="vegetarian">Vegetarian</button>
+                        <button class="pill" data-value="non-vegetarian">Non Vegetarian</button>
+                        <button class="pill" data-value="vegan">Vegan</button>
+                    </div>
+                    <p class="diet-hint" id="diet-hint">Vegetarian also includes vegan-friendly foods. Vegan shows vegan-only options.</p>
+                </div>
+
+                <div class="selector-group">
+                    <span class="field-label">Maximum food items: <strong id="max-items-value">3</strong></span>
+                    <input type="range" id="max-items-slider" min="1" max="5" value="3" step="1">
+                </div>
+
+                <p class="tolerance-note">Tolerance band: ±<span id="tolerance-value">8</span>% (edit in your goal)</p>
+
+                <label class="pantry-card" for="use-pantry-checkbox">
+                    <div class="pantry-card-top">
+                        <input type="checkbox" id="use-pantry-checkbox">
+                        <span>Use What I Have</span>
+                    </div>
+                    <p>Restrict the search to ingredients you already have at home.</p>
+                    <button type="button" class="pantry-manage-btn" id="manage-pantry-btn">Manage pantry list</button>
+                </label>
+
+                <button class="btn btn-primary btn-large btn-block generate-btn" id="generate-btn">
+                    <span class="generate-icon">✦</span> Generate Best Meal
+                </button>
+
+            </section>
+
+            <!-- ============ RIGHT: Results ============ -->
+            <section class="calc-results" id="results-panel">
+
+                <div class="state empty-state" id="state-empty">
+                    <div class="state-icon">🍽</div>
+                    <h3>Ready when you are</h3>
+                    <p>Set your target on the left and hit Generate Best Meal. The engine compares available food combinations and shows the top ranked matches.</p>
+                    <button class="btn btn-secondary" id="browse-db-btn-empty">Browse the food database</button>
+                </div>
+
+                <div class="results-list" id="results-list" hidden></div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </div>
+        <p>Reverse your macros. Build your meal.</p>
+    </footer>
+
+    <!-- Food database modal -->
+    <div class="mm-modal-overlay" id="db-modal-overlay">
+        <div class="mm-modal">
+            <div class="mm-modal-header">
+                <div>
+                    <h3>Food database</h3>
+                    <p id="db-modal-subtitle">Everything the recommendation engine can search.</p>
+                </div>
+                <button class="mm-modal-close" id="db-modal-close">✕</button>
+            </div>
+            <div class="mm-modal-body">
+                <table class="db-table" id="db-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Diet</th>
+                            <th>Meal types</th>
+                            <th>Serving</th>
+                            <th>Cal</th>
+                            <th>Protein</th>
+                            <th>Carbs</th>
+                            <th>Fat</th>
+                            <th>Pantry</th>
+                        </tr>
+                    </thead>
+                    <tbody id="db-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mm-toast" id="mm-toast"></div>
+
+    <script src="js/foodDatabase.js"></script>
+    <script src="js/pantryStorage.js"></script>
+    <script src="js/mealStorage.js"></script>
+    <script src="js/recommendationEngine.js"></script>
+    <script src="js/calculator.js"></script>
+</body>
+</html>

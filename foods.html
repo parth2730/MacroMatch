@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Explorer - Browse the MacroMatch Database</title>
+    <meta name="description" content="Search and filter every food in MacroMatch's nutrition database by category, diet, protein and calories.">
+    <meta property="og:title" content="Food Explorer - MacroMatch">
+    <meta property="og:description" content="Search and filter every food in MacroMatch's nutrition database by category, diet, protein and calories.">
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/foods.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </a>
+        <nav class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="calculator.html">Meal Calculator</a>
+            <a href="foods.html" class="active">Food Explorer</a>
+        </nav>
+        <div class="nav-actions">
+            <span class="nav-user" id="nav-user"></span>
+            <button class="btn btn-secondary" id="logout-btn">Log out</button>
+        </div>
+    </header>
+
+    <main class="foods-main">
+
+        <div class="foods-header">
+            <span class="section-label">FOOD EXPLORER</span>
+            <h1>Browse the food database</h1>
+            <p class="foods-subtext">Every food here comes from MacroMatch's local nutrition database &mdash; the same data the Meal Calculator's recommendation engine searches through.</p>
+        </div>
+
+        <section class="filter-panel" aria-label="Food filters">
+
+            <div class="filter-row">
+                <div class="filter-field search-field">
+                    <label for="food-search">Search foods</label>
+                    <span class="search-icon" aria-hidden="true">&#128269;</span>
+                    <input type="text" id="food-search" placeholder="Search by food name&hellip;" autocomplete="off">
+                </div>
+
+                <div class="filter-field category-field">
+                    <label for="food-category">Category</label>
+                    <select id="food-category">
+                        <option value="all">All categories</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-field">
+                <span class="field-label">Diet</span>
+                <div class="pill-row" id="diet-pill-row">
+                    <button type="button" class="pill active" data-value="all">All diets</button>
+                    <button type="button" class="pill" data-value="vegetarian">Vegetarian</button>
+                    <button type="button" class="pill" data-value="non-vegetarian">Non-vegetarian</button>
+                    <button type="button" class="pill" data-value="vegan">Vegan</button>
+                </div>
+            </div>
+
+            <div class="filter-field">
+                <span class="field-label">Quick filters</span>
+                <div class="pill-row">
+                    <button type="button" class="pill toggle-pill" id="toggle-high-protein" aria-pressed="false">High Protein</button>
+                    <button type="button" class="pill toggle-pill" id="toggle-low-calorie" aria-pressed="false">Low Calorie</button>
+                </div>
+            </div>
+
+        </section>
+
+        <p class="result-count" id="result-count"></p>
+
+        <div class="foods-grid" id="foods-grid" aria-live="polite"></div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </div>
+        <p>Reverse your macros. Build your meal.</p>
+    </footer>
+
+    <!-- Food details modal -->
+    <div class="mm-modal-overlay" id="food-detail-overlay">
+        <div class="mm-modal" role="dialog" aria-modal="true" aria-labelledby="food-detail-title">
+            <div class="mm-modal-header">
+                <div>
+                    <h3 id="food-detail-title">Food name</h3>
+                    <p class="food-detail-meta" id="food-detail-meta"></p>
+                </div>
+                <button class="mm-modal-close" id="food-detail-close" aria-label="Close details">&#10005;</button>
+            </div>
+            <div class="mm-modal-body">
+                <div class="food-detail-list" id="food-detail-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mm-toast" id="mm-toast"></div>
+
+    <script src="js/pantryStorage.js"></script>
+    <script src="js/foods.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MacroMatch</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </a>
+        <nav class="nav-links">
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="calculator.html">Meal Calculator</a>
+            <a href="foods.html">Food Explorer</a>
+        </nav>
+        <div class="nav-actions">
+            <span class="nav-user" id="nav-user">Welcome</span>
+            <button class="btn btn-secondary" id="logout-btn">Log out</button>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+
+        <section class="dashboard-hero">
+            <div>
+                <span class="section-label">DASHBOARD</span>
+                <h1 id="welcome-heading">Welcome back.</h1>
+                <p class="dashboard-subtext">Here's where your nutrition targets meet real meals.</p>
+            </div>
+        </section>
+
+        <section class="today-summary">
+            <div class="summary-heading">
+                <h2>Today's log</h2>
+                <span class="light-text" id="today-date"></span>
+            </div>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <span class="small-label">Calories logged</span>
+                    <strong id="today-calories">0</strong>
+                    <small>kcal</small>
+                </div>
+                <div class="summary-card">
+                    <span class="small-label">Protein</span>
+                    <strong id="today-protein">0</strong>
+                    <small>g</small>
+                </div>
+                <div class="summary-card">
+                    <span class="small-label">Carbs</span>
+                    <strong id="today-carbs">0</strong>
+                    <small>g</small>
+                </div>
+                <div class="summary-card">
+                    <span class="small-label">Fat</span>
+                    <strong id="today-fat">0</strong>
+                    <small>g</small>
+                </div>
+            </div>
+            <p class="empty-log-note" id="empty-log-note">
+                Nothing logged yet today &mdash; generate a meal and add it to your log.
+            </p>
+        </section>
+
+        <section class="feature-cards">
+
+            <div class="feature-card-large" id="open-calculator-card">
+                <div class="feature-icon">🍽</div>
+                <div>
+                    <h3>Meal Calculator</h3>
+                    <p>Find the best meal according to your calorie and macro targets.</p>
+                </div>
+                <button class="btn btn-primary btn-large" id="open-calculator-btn">Open Calculator →</button>
+            </div>
+
+            <div class="feature-card-small">
+                <div class="feature-icon">📖</div>
+                <h3>Food Database</h3>
+                <p>Browse every food available to the recommendation engine.</p>
+                <button class="btn btn-secondary" id="open-database-btn">Browse database</button>
+            </div>
+
+            <div class="feature-card-small">
+                <div class="feature-icon">♡</div>
+                <h3>Saved Meals</h3>
+                <p id="saved-meals-count">No meals saved yet.</p>
+                <button class="btn btn-secondary" id="view-saved-btn">View saved meals</button>
+            </div>
+
+        </section>
+
+        <section class="today-log-list-section" id="today-log-section" hidden>
+            <h2>Meals logged today</h2>
+            <div class="today-log-list" id="today-log-list"></div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </div>
+        <p>Reverse your macros. Build your meal.</p>
+    </footer>
+
+    <!-- Food database modal (shared with calculator page) -->
+    <div class="mm-modal-overlay" id="db-modal-overlay">
+        <div class="mm-modal">
+            <div class="mm-modal-header">
+                <div>
+                    <h3>Food database</h3>
+                    <p id="db-modal-subtitle">Everything the recommendation engine can search.</p>
+                </div>
+                <button class="mm-modal-close" id="db-modal-close">✕</button>
+            </div>
+            <div class="mm-modal-body">
+                <table class="db-table" id="db-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Diet</th>
+                            <th>Meal types</th>
+                            <th>Serving</th>
+                            <th>Cal</th>
+                            <th>Protein</th>
+                            <th>Carbs</th>
+                            <th>Fat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="db-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saved meals modal -->
+    <div class="mm-modal-overlay" id="saved-modal-overlay">
+        <div class="mm-modal">
+            <div class="mm-modal-header">
+                <div>
+                    <h3>Saved meals</h3>
+                    <p>Meals you've bookmarked from the calculator.</p>
+                </div>
+                <button class="mm-modal-close" id="saved-modal-close">✕</button>
+            </div>
+            <div class="mm-modal-body" id="saved-modal-body"></div>
+        </div>
+    </div>
+
+    <div class="mm-toast" id="mm-toast"></div>
+
+    <script src="js/foodDatabase.js"></script>
+    <script src="js/pantryStorage.js"></script>
+    <script src="js/mealStorage.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+/* =========================================================
+   dashboard.css
+   ========================================================= */
+
+.dashboard-main {
+    padding: 50px 7% 90px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-hero h1 {
+    margin-top: 8px;
+    font-size: 40px;
+    letter-spacing: -1px;
+}
+
+.dashboard-subtext {
+    margin-top: 10px;
+    color: var(--light-text);
+    font-size: 15px;
+}
+
+.light-text {
+    color: var(--light-text);
+}
+
+/* ---------------- Today's summary ---------------- */
+
+.today-summary {
+    margin-top: 40px;
+    padding: 24px;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+}
+
+.summary-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.summary-heading h2 {
+    font-size: 20px;
+}
+
+.summary-heading span {
+    font-size: 13px;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.summary-card {
+    padding: 16px;
+    background-color: var(--card-color-alt);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+}
+
+.summary-card .small-label {
+    display: block;
+    color: var(--light-text);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.summary-card strong {
+    display: block;
+    margin-top: 6px;
+    font-size: 26px;
+}
+
+.summary-card small {
+    color: var(--light-text);
+    font-size: 12px;
+}
+
+.empty-log-note {
+    margin-top: 16px;
+    color: var(--light-text);
+    font-size: 13px;
+}
+
+.empty-log-note.hidden {
+    display: none;
+}
+
+/* ---------------- Feature cards ---------------- */
+
+.feature-cards {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 16px;
+}
+
+.feature-card-large,
+.feature-card-small {
+    padding: 26px;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+}
+
+.feature-card-large {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 18px;
+    background-color: #151914;
+}
+
+.feature-card-large h3 {
+    font-size: 24px;
+    margin-top: 14px;
+}
+
+.feature-card-large p {
+    margin-top: 8px;
+    color: var(--light-text);
+    font-size: 14px;
+    max-width: 380px;
+}
+
+.feature-card-small {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.feature-card-small h3 {
+    margin-top: 12px;
+    font-size: 18px;
+}
+
+.feature-card-small p {
+    color: var(--light-text);
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+.feature-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--green-dim);
+    color: var(--green);
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+/* ---------------- Today's log list ---------------- */
+
+.today-log-list-section {
+    margin-top: 34px;
+}
+
+.today-log-list-section h2 {
+    font-size: 20px;
+    margin-bottom: 14px;
+}
+
+.today-log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.today-log-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background-color: var(--card-color);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+}
+
+.today-log-item .log-item-name {
+    font-weight: 600;
+}
+
+.today-log-item .log-item-meta {
+    color: var(--light-text);
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.today-log-item .log-item-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.today-log-item .log-item-macros {
+    color: var(--light-text);
+    font-size: 13px;
+    text-align: right;
+}
+
+.log-item-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--light-text);
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.log-item-delete-btn:hover {
+    color: var(--red);
+    border-color: var(--red);
+}
+
+/* ---------------- Food database table ---------------- */
+
+.db-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.db-table th,
+.db-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.db-table th {
+    color: var(--light-text);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    background-color: var(--card-color);
+}
+
+.db-diet-tag {
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.db-diet-tag.vegan {
+    background-color: var(--green-dim);
+    color: var(--green);
+}
+
+.db-diet-tag.vegetarian {
+    background-color: #1e2438;
+    color: var(--blue);
+}
+
+.db-diet-tag.non-vegetarian {
+    background-color: #351f1f;
+    color: var(--red);
+}
+
+/* ---------------- Saved meals in modal ---------------- */
+
+.saved-meal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.saved-meal-row:last-child {
+    border-bottom: none;
+}
+
+.saved-meal-row .saved-meal-name {
+    font-weight: 600;
+}
+
+.saved-meal-row .saved-meal-meta {
+    color: var(--light-text);
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.empty-state-text {
+    color: var(--light-text);
+    font-size: 14px;
+    padding: 20px 0;
+}
+
+@media (max-width: 900px) {
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .feature-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-main {
+        padding: 40px 5% 70px;
+    }
+    .dashboard-hero h1 {
+        font-size: 32px;
+    }
+    .summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .today-log-item .log-item-right {
+        gap: 8px;
+    }
+    .today-log-item .log-item-macros {
+        font-size: 11px;
+    }
+}
