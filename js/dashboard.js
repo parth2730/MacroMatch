@@ -76,6 +76,7 @@
                         '<div class="log-item-name">' + escapeHtml(entry.name) + '</div>' +
                         '<div class="log-item-meta">' + escapeHtml(capitalize(entry.mealType || "")) + ' &middot; ' + entry.itemCount + ' items</div>' +
                     '</div>' +
+<<<<<<< HEAD
                     '<div class="log-item-right">' +
                         '<div class="log-item-macros">' +
                             Math.round(entry.totals.calories) + ' Cal &middot; ' +
@@ -84,11 +85,19 @@
                             round1(entry.totals.fat) + 'g F' +
                         '</div>' +
                         '<button type="button" class="log-item-delete-btn" data-log-id="' + entry.logId + '" aria-label="Remove ' + escapeHtml(entry.name) + ' from today\'s log">&#10005;</button>' +
+=======
+                    '<div class="log-item-macros">' +
+                        Math.round(entry.totals.calories) + ' Cal &middot; ' +
+                        round1(entry.totals.protein) + 'g P &middot; ' +
+                        round1(entry.totals.carbs) + 'g C &middot; ' +
+                        round1(entry.totals.fat) + 'g F' +
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
                     '</div>';
                 list.appendChild(row);
             });
         }
 
+<<<<<<< HEAD
         document.getElementById("today-log-list").addEventListener("click", function (e) {
             var deleteBtn = e.target.closest(".log-item-delete-btn");
             if (!deleteBtn) return;
@@ -97,6 +106,8 @@
             showToast("Removed from today's log.");
         });
 
+=======
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
         /* -------- Saved meals count + modal -------- */
         function renderSavedCount() {
             var saved = MealStorageService.getSavedMeals();
@@ -139,12 +150,17 @@
                             escapeHtml(capitalize(meal.mealType || "")) + ' &middot; ' + meal.itemCount + ' items &middot; ' +
                             Math.round(meal.totals.calories) + ' Cal &middot; ' + round1(meal.totals.protein) + 'g protein' +
                         '</div>' +
+<<<<<<< HEAD
                     '</div>' +
                     '<button type="button" class="log-item-delete-btn" data-saved-id="' + meal.savedId + '" aria-label="Unsave ' + escapeHtml(meal.name) + '">&#10005;</button>';
+=======
+                    '</div>';
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
                 body.appendChild(row);
             });
         }
 
+<<<<<<< HEAD
         document.getElementById("saved-modal-body").addEventListener("click", function (e) {
             var deleteBtn = e.target.closest(".log-item-delete-btn");
             if (!deleteBtn) return;
@@ -154,6 +170,8 @@
             showToast("Removed from saved meals.");
         });
 
+=======
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
         /* -------- Food database modal -------- */
         var dbOverlay = document.getElementById("db-modal-overlay");
         document.getElementById("open-database-btn").addEventListener("click", function () {
@@ -192,6 +210,7 @@
         }
     });
 
+<<<<<<< HEAD
     /* -------- Toast (reuses the shared #mm-toast element/classes) -------- */
     function showToast(message) {
         var toast = document.getElementById("mm-toast");
@@ -204,6 +223,8 @@
         }, 2200);
     }
 
+=======
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
     /* -------- Shared small helpers -------- */
     function round1(n) {
         return Math.round(n * 10) / 10;
@@ -217,4 +238,8 @@
         div.textContent = str == null ? "" : String(str);
         return div.innerHTML;
     }
+<<<<<<< HEAD
 })();
+=======
+})();
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c

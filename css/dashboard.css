@@ -193,18 +193,22 @@
     margin-top: 3px;
 }
 
+<<<<<<< HEAD
 .today-log-item .log-item-right {
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
+=======
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
 .today-log-item .log-item-macros {
     color: var(--light-text);
     font-size: 13px;
     text-align: right;
 }
 
+<<<<<<< HEAD
 .log-item-delete-btn {
     display: flex;
     align-items: center;
@@ -225,6 +229,8 @@
     border-color: var(--red);
 }
 
+=======
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
 /* ---------------- Food database table ---------------- */
 
 .db-table {
@@ -321,6 +327,7 @@
     .summary-grid {
         grid-template-columns: 1fr 1fr;
     }
+<<<<<<< HEAD
     .today-log-item .log-item-right {
         gap: 8px;
     }
@@ -328,3 +335,6 @@
         font-size: 11px;
     }
 }
+=======
+}
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c

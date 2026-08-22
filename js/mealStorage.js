@@ -105,6 +105,7 @@
         return { entry: entry, todayLog: log.filter(function (e) { return e.date === todayString(); }) };
     }
 
+<<<<<<< HEAD
     function removeFromLog(logId) {
         var log = readArray(TODAY_LOG_KEY).filter(function (entry) {
             return entry.logId !== logId;
@@ -113,6 +114,8 @@
         return log.filter(function (entry) { return entry.date === todayString(); });
     }
 
+=======
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
     function getTodayTotals() {
         var todayLog = getTodayLog();
         return todayLog.reduce(function (totals, entry) {
@@ -134,9 +137,16 @@
         getTodayLog: getTodayLog,
         getFullLog: getFullLog,
         addToTodayLog: addToTodayLog,
+<<<<<<< HEAD
         removeFromLog: removeFromLog,
+=======
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
         getTodayTotals: getTodayTotals,
         todayString: todayString
     };
 
+<<<<<<< HEAD
 })(window);
+=======
+})(window);
+>>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
