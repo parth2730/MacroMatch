@@ -190,34 +190,21 @@
     margin-top: 3px;
 }
 
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 .today-log-item .log-item-right {
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
-<<<<<<< HEAD
 
-=======
-=======
->>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 .today-log-item .log-item-macros {
     color: var(--light-text);
     font-size: 13px;
     text-align: right;
 }
 
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 .log-item-delete-btn {
     display: flex;
     align-items: center;
@@ -238,12 +225,6 @@
     border-color: var(--red);
 }
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
-/* ---------------- Food database table ---------------- */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .db-table {
     width: 100%;
@@ -338,11 +319,7 @@
     .summary-grid {
         grid-template-columns: 1fr 1fr;
     }
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
     .today-log-item .log-item-right {
         gap: 8px;
     }
@@ -350,11 +327,5 @@
         font-size: 11px;
     }
 }
-<<<<<<< HEAD
 
 
-=======
-=======
-}
->>>>>>> 32886f11d1fbed323ca11cc69a409de02ed8a54c
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f

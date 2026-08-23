@@ -187,13 +187,7 @@
             });
         }
 
-<<<<<<< HEAD
         
-=======
-        /* -------- Cross-tab sync --------
-           Logging/removing a meal or a saved-meal in another tab fires
-           "storage" here. Re-render just the piece that key affects. */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
         window.addEventListener("storage", function (e) {
             if (e.key === MealStorageService.TODAY_LOG_KEY) {
                 renderTodaySummary();

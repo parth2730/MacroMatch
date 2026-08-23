@@ -393,16 +393,7 @@
        
         showState("empty");
 
-<<<<<<< HEAD
         
-=======
-        /* -------- Cross-tab sync --------
-           If a meal gets logged (e.g. from a second tab) or the goal
-           gets edited elsewhere, "storage" fires here automatically.
-           We only refresh the "remaining target today" summary box —
-           we deliberately don't touch els.calories/protein/carbs/fat,
-           since the person may be mid-edit on those inputs right now. */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
         window.addEventListener("storage", function (e) {
             if (e.key === MealStorageService.TODAY_LOG_KEY || e.key === DAILY_GOAL_KEY) {
                 renderRemainingTarget();

@@ -1,29 +1,11 @@
-<<<<<<< HEAD
 
-=======
-/* =========================================================
-   progress.css
-   -------------------------------------------------------
-   Relies on tokens + a few shared classes already defined
-   in shared.css: --bg-color, --card-color, --border-color,
-   --main-text, --light-text, --green, .section-label,
-   .small-label, .progress-bar, .progress-fill, .macro-dot,
-   .btn / .btn-secondary
-   ========================================================= */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .progress-main {
     padding: 55px 7% 90px;
 }
 
 
-<<<<<<< HEAD
 
-=======
-/* =========================
-   Hero
-========================= */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .progress-hero {
     max-width: 700px;
@@ -51,13 +33,7 @@
 }
 
 
-<<<<<<< HEAD
 
-=======
-/* =========================
-   Stat cards
-========================= */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .stats-grid {
     display: grid;
@@ -101,13 +77,6 @@
 }
 
 
-<<<<<<< HEAD
-=======
-/* =========================
-   Today's progress
-========================= */
-
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 .progress-card {
     padding: 28px;
 
@@ -160,11 +129,7 @@
 }
 
 
-<<<<<<< HEAD
 
-=======
-/* Per-row fill colors, reusing the macro palette from shared.css */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .progress-fill.cal {
     background-color: var(--green);
@@ -186,13 +151,7 @@
 }
 
 
-<<<<<<< HEAD
 
-=======
-/* =========================
-   Weekly charts
-========================= */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .charts-grid {
     display: grid;
@@ -278,13 +237,7 @@
 }
 
 
-<<<<<<< HEAD
 
-=======
-/* =========================
-   Macro distribution
-========================= */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .macro-distribution-card {
     padding: 28px;
@@ -379,24 +332,12 @@
 }
 
 
-<<<<<<< HEAD
-=======
-/* =========================
-   Utility
-========================= */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 .hidden {
     display: none;
 }
 
 
-<<<<<<< HEAD
-=======
-/* =========================
-   Responsive
-========================= */
->>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 @media (max-width: 950px) {
 
