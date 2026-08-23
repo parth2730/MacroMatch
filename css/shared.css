@@ -1,11 +1,4 @@
-/* =========================================================
-   shared.css
-   -------------------------------------------------------
-   Shared theme tokens + navbar/footer/button styles, kept
-   in sync with the variables already used in index.css,
-   login.html and signup.html so new pages (dashboard,
-   calculator) feel native to the existing MacroMatch app.
-   ========================================================= */
+
 
 * {
     margin: 0;
@@ -42,7 +35,7 @@ body {
     line-height: 1.6;
 }
 
-/* ---------------- Navbar ---------------- */
+
 
 .navbar {
     display: flex;
@@ -108,7 +101,7 @@ body {
     color: var(--main-text);
 }
 
-/* ---------------- Buttons ---------------- */
+
 
 .btn {
     padding: 10px 17px;
@@ -161,7 +154,7 @@ body {
     cursor: not-allowed;
 }
 
-/* ---------------- Section label ---------------- */
+
 
 .section-label {
     color: var(--green);
@@ -170,7 +163,7 @@ body {
     letter-spacing: 1.5px;
 }
 
-/* ---------------- Footer ---------------- */
+
 
 .footer {
     padding: 25px 7%;
@@ -185,7 +178,7 @@ body {
     font-size: 13px;
 }
 
-/* ---------------- Toast (small success feedback) ---------------- */
+
 
 .mm-toast {
     position: fixed;
@@ -211,7 +204,7 @@ body {
     pointer-events: auto;
 }
 
-/* ---------------- Modal ---------------- */
+
 
 .mm-modal-overlay {
     position: fixed;

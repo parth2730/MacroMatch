@@ -1,6 +1,4 @@
-/* =========================================================
-   calculator.css
-   ========================================================= */
+
 
 .calc-main {
     padding: 40px 7% 90px;
@@ -15,7 +13,6 @@
     align-items: start;
 }
 
-/* ---------------- Left panel ---------------- */
 
 .calc-panel {
     padding: 26px;
@@ -245,7 +242,7 @@ input[type="range"] {
     font-size: 15px;
 }
 
-/* ---------------- Right panel: states ---------------- */
+
 
 .calc-results {
     min-height: calc(100vh - 230px);
@@ -288,7 +285,7 @@ input[type="range"] {
     margin-bottom: 20px;
 }
 
-/* ---------------- Result cards ---------------- */
+
 
 .results-list {
     display: flex;
@@ -462,7 +459,7 @@ input[type="range"] {
     color: var(--green);
 }
 
-/* ---------------- Responsive ---------------- */
+
 
 @media (max-width: 1050px) {
     .calc-grid {

@@ -1,32 +1,8 @@
-/* =========================================================
-   recommendationEngine.js
-   -------------------------------------------------------
-   Turns a nutrition target (+ meal type, diet, max items)
-   into ranked meal combinations sourced from the LocalStorage
-   food database.
-
-   Public entry point:
-     RecommendationEngine.generate(target, options)
-       target  = { calories, protein, carbs, fat }
-       options = {
-         mealType: "breakfast" | "lunch" | "dinner" | "snack",
-         diet: "vegetarian" | "non-vegetarian" | "vegan",
-         maxItems: 1-6,
-         useWhatIHave: boolean,
-         tolerancePercent: number (default TOLERANCE_PERCENT)
-       }
-     -> array of ranked meal objects (best match first)
-   ========================================================= */
-
 (function (global) {
     "use strict";
 
-    // Configurable tolerance band. Change this single value to
-    // adjust how strict/loose "within tolerance" is app-wide.
+   
     var TOLERANCE_PERCENT = 8;
-
-    // Scoring weights (protein weighted slightly higher, per spec).
-    // Must sum to 1.
     var WEIGHTS = {
         calories: 0.30,
         protein: 0.35,
@@ -36,13 +12,11 @@
 
     var MEAL_NAME_SUFFIXES = ["Plate", "Bowl", "Combo", "Meal"];
 
-    /* ---------------------------------------------------
-       Diet compatibility
-    --------------------------------------------------- */
+
     function isDietCompatible(foodDiet, selectedDiet) {
         if (selectedDiet === "vegan") return foodDiet === "vegan";
         if (selectedDiet === "vegetarian") return foodDiet === "vegan" || foodDiet === "vegetarian";
-        // non-vegetarian selection allows everything
+
         return true;
     }
 
@@ -54,9 +28,7 @@
         return "Non-Vegetarian";
     }
 
-    /* ---------------------------------------------------
-       Candidate pool selection (keeps combinatorics sane)
-    --------------------------------------------------- */
+
     function buildCandidatePool(filteredFoods, maxItems) {
         var poolSize;
         if (maxItems <= 1) poolSize = 60;
@@ -66,8 +38,7 @@
 
         if (filteredFoods.length <= poolSize) return filteredFoods.slice();
 
-        // Prioritize a mix of protein-dense and calorie-moderate items
-        // so combinations stay realistic and varied.
+
         var sorted = filteredFoods.slice().sort(function (a, b) {
             var aScore = (a.protein / Math.max(a.calories, 1));
             var bScore = (b.protein / Math.max(b.calories, 1));
@@ -76,9 +47,7 @@
         return sorted.slice(0, poolSize);
     }
 
-    /* ---------------------------------------------------
-       Combination generation (no repeats within a combo)
-    --------------------------------------------------- */
+
     function generateCombinations(pool, maxItems) {
         var results = [];
         var maxSize = Math.max(1, Math.min(maxItems, 6));
@@ -99,15 +68,13 @@
         return results;
     }
 
-    /* ---------------------------------------------------
-       Quantity rounding helpers
-    --------------------------------------------------- */
+
     function roundQuantity(food, rawQty) {
         if (food.unit === "piece") {
-            var rounded = Math.round(rawQty * 2) / 2; // nearest 0.5 piece
+            var rounded = Math.round(rawQty * 2) / 2; 
             return Math.max(0.5, rounded);
         }
-        // grams / ml -> nearest 25
+        
         var roundedWeight = Math.round(rawQty / 25) * 25;
         return Math.max(25, roundedWeight);
     }
@@ -122,9 +89,7 @@
         };
     }
 
-    /* ---------------------------------------------------
-       Scoring
-    --------------------------------------------------- */
+
     function similarity(actual, target) {
         if (target <= 0) return actual === 0 ? 1 : 0;
         var diffRatio = Math.abs(actual - target) / target;
@@ -143,7 +108,7 @@
             sCarb * WEIGHTS.carbs +
             sFat * WEIGHTS.fat;
 
-        return Math.round(weighted * 1000) / 10; // one decimal, e.g. 98.9
+        return Math.round(weighted * 1000) / 10; 
     }
 
     function isWithinTolerance(totals, target, tolerancePercent) {
@@ -158,10 +123,6 @@
             within(totals.fat, target.fat);
     }
 
-    /* ---------------------------------------------------
-       Evaluate one combination across a few scale variants,
-       keep whichever variant scores best.
-    --------------------------------------------------- */
     function evaluateCombo(combo, target) {
         var baseTotals = combo.reduce(function (acc, food) {
             acc.calories += food.calories;
@@ -222,10 +183,6 @@
 
         return bestVariant;
     }
-
-    /* ---------------------------------------------------
-       Naming
-    --------------------------------------------------- */
     function generateMealName(items, mealType) {
         var names = items.slice(0, 2).map(function (item) {
             return item.name.replace(/\s*\([^)]*\)/g, "").trim();
@@ -240,7 +197,7 @@
         if (hasSoupOrCurry) {
             suffix = "Bowl";
         } else {
-            // deterministic pseudo-variety based on signature length
+            
             var hash = items.reduce(function (acc, it) { return acc + it.name.length; }, 0);
             suffix = MEAL_NAME_SUFFIXES[hash % MEAL_NAME_SUFFIXES.length];
         }
@@ -248,9 +205,7 @@
         return base + " " + suffix;
     }
 
-    /* ---------------------------------------------------
-       Public: generate()
-    --------------------------------------------------- */
+
     function generate(target, options) {
         options = options || {};
         var mealType = options.mealType;
@@ -291,9 +246,7 @@
 
             var withinTolerance = isWithinTolerance(result.totals, target, tolerancePercent);
 
-            // Keep every valid combo (in or out of tolerance) so we can
-            // always surface the closest options rather than an empty
-            // screen when nothing lands inside the strict band.
+
             evaluated.push({
                 signature: signature,
                 name: generateMealName(result.items, mealType),
@@ -324,7 +277,7 @@
         if (evaluated.length === 0) {
             reason = "no-matches";
         } else if (withinBand.length === 0) {
-            reason = "closest-only"; // nothing inside the strict tolerance band
+            reason = "closest-only"; 
         }
 
         return {

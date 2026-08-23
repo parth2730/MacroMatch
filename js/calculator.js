@@ -1,7 +1,3 @@
-/* =========================================================
-   calculator.js
-   ========================================================= */
-
 (function () {
     "use strict";
 
@@ -17,7 +13,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        /* -------- Session (soft gate) -------- */
+        
         var currentUser = null;
         try {
             var raw = localStorage.getItem("mm_current_user");
@@ -36,7 +32,7 @@
             window.location.href = "index.html";
         });
 
-        /* -------- Elements -------- */
+        
         var els = {
             calories: document.getElementById("input-calories"),
             protein: document.getElementById("input-protein"),
@@ -65,7 +61,7 @@
             resultsList: document.getElementById("results-list")
         };
 
-        /* -------- Daily goal + remaining target -------- */
+        
         function getGoal() {
             try {
                 var raw = localStorage.getItem(DAILY_GOAL_KEY);
@@ -115,7 +111,7 @@
 
         els.toleranceValue.textContent = RecommendationEngine.TOLERANCE_PERCENT;
 
-        /* -------- Goal editor -------- */
+        
         els.editGoalBtn.addEventListener("click", function () {
             var goal = getGoal();
             els.goalCalories.value = goal.calories;
@@ -138,7 +134,7 @@
             showToast("Daily goal updated.");
         });
 
-        /* -------- Pill selectors -------- */
+        
         function wirePillRow(rowEl, stateKey) {
             rowEl.querySelectorAll(".pill").forEach(function (pill) {
                 pill.addEventListener("click", function () {
@@ -151,13 +147,13 @@
         wirePillRow(els.mealTypeRow, "mealType");
         wirePillRow(els.dietRow, "diet");
 
-        /* -------- Max items slider -------- */
+        
         els.maxItemsSlider.addEventListener("input", function () {
             state.maxItems = parseInt(els.maxItemsSlider.value, 10);
             els.maxItemsValue.textContent = state.maxItems;
         });
 
-        /* -------- Use what I have -------- */
+        
         els.usePantry.addEventListener("change", function () {
             state.useWhatIHave = els.usePantry.checked;
             if (state.useWhatIHave && PantryService.getIds().length === 0) {
@@ -170,7 +166,7 @@
             openDatabaseModal(true);
         });
 
-        /* -------- Validation -------- */
+        
         function validateInputs() {
             var values = {
                 calories: parseFloat(els.calories.value),
@@ -201,7 +197,7 @@
             return { valid: true, values: values };
         }
 
-        /* -------- Generate -------- */
+        
         els.generateBtn.addEventListener("click", function () {
             els.error.textContent = "";
             var validation = validateInputs();
@@ -249,13 +245,13 @@
             }
         });
 
-        /* -------- States -------- */
+        
         function showState(name) {
             els.stateEmpty.hidden = name !== "empty";
             els.resultsList.hidden = name !== "results";
         }
 
-        /* -------- Render results -------- */
+       
         var RANK_META = [
             { badge: "🥇", label: "BEST MATCH", cardClass: "best-match" },
             { badge: "🥈", label: "OPTION 2", cardClass: "" },
@@ -342,7 +338,7 @@
             });
         }
 
-        /* -------- Food database modal (with pantry management) -------- */
+        
         var dbOverlay = document.getElementById("db-modal-overlay");
 
         function openDatabaseModal(focusPantry) {
@@ -394,11 +390,18 @@
             });
         }
 
-        /* -------- Initial state -------- */
+       
         showState("empty");
+
+        
+        window.addEventListener("storage", function (e) {
+            if (e.key === MealStorageService.TODAY_LOG_KEY || e.key === DAILY_GOAL_KEY) {
+                renderRemainingTarget();
+            }
+        });
     });
 
-    /* -------- Helpers -------- */
+    
     function round1(n) {
         return Math.round(n * 10) / 10;
     }

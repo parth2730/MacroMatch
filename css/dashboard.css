@@ -1,6 +1,4 @@
-/* =========================================================
-   dashboard.css
-   ========================================================= */
+
 
 .dashboard-main {
     padding: 50px 7% 90px;
@@ -24,7 +22,7 @@
     color: var(--light-text);
 }
 
-/* ---------------- Today's summary ---------------- */
+
 
 .today-summary {
     margin-top: 40px;
@@ -90,7 +88,6 @@
     display: none;
 }
 
-/* ---------------- Feature cards ---------------- */
 
 .feature-cards {
     margin-top: 30px;
@@ -156,7 +153,7 @@
     font-size: 20px;
 }
 
-/* ---------------- Today's log list ---------------- */
+
 
 .today-log-list-section {
     margin-top: 34px;
@@ -193,17 +190,20 @@
     margin-top: 3px;
 }
 
+
 .today-log-item .log-item-right {
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
+
 .today-log-item .log-item-macros {
     color: var(--light-text);
     font-size: 13px;
     text-align: right;
 }
+
 
 .log-item-delete-btn {
     display: flex;
@@ -225,7 +225,6 @@
     border-color: var(--red);
 }
 
-/* ---------------- Food database table ---------------- */
 
 .db-table {
     width: 100%;
@@ -272,7 +271,6 @@
     color: var(--red);
 }
 
-/* ---------------- Saved meals in modal ---------------- */
 
 .saved-meal-row {
     display: flex;
@@ -321,6 +319,7 @@
     .summary-grid {
         grid-template-columns: 1fr 1fr;
     }
+
     .today-log-item .log-item-right {
         gap: 8px;
     }
@@ -328,3 +327,5 @@
         font-size: 11px;
     }
 }
+
+

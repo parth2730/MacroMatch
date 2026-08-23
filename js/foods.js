@@ -1,24 +1,8 @@
-/* =========================================================
-   foods.js — Food Explorer page logic
-   -------------------------------------------------------
-   - Loads /foods.json at runtime via the Fetch API inside an
-     async function, with a simple module-level cache (this
-     project has no React Query / build step, so a cached
-     promise is the vanilla equivalent) and explicit
-     loading / error states.
-   - Filters (search, category, diet, high protein, low cal)
-     combine with AND, results sorted alphabetically.
-   - Pantry toggling reuses the existing PantryService
-     (js/pantryStorage.js, "mm_pantry" key) so state stays in
-     sync with the Meal Calculator's "Use What I Have" list,
-     including reactively across open tabs via the storage event.
-   ========================================================= */
-
 (function () {
     "use strict";
 
-    var HIGH_PROTEIN_RATIO = 0.12; // protein g per g of serving
-    var LOW_CALORIE_MAX = 130;     // kcal
+    var HIGH_PROTEIN_RATIO = 0.12; 
+    var LOW_CALORIE_MAX = 130;     
 
     var state = {
         allFoods: [],
@@ -29,7 +13,7 @@
         lowCalorie: false
     };
 
-    var foodsCache = null; // caches the in-flight/resolved fetch promise
+    var foodsCache = null; 
 
     function loadFoods() {
         if (foodsCache) return foodsCache;
@@ -49,7 +33,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        /* -------- Session (soft gate, same pattern as dashboard.js) -------- */
+
         var currentUser = null;
         try {
             var raw = localStorage.getItem("mm_current_user");
@@ -79,7 +63,6 @@
         var highProteinPill = document.getElementById("toggle-high-protein");
         var lowCaloriePill = document.getElementById("toggle-low-calorie");
 
-        /* -------- Initial fetch -------- */
         renderStatus("Loading foods\u2026", false);
 
         loadFoods().then(function (foods) {
@@ -91,7 +74,7 @@
             renderStatus("Couldn't load the food database. Please try refreshing the page.", true);
         });
 
-        /* -------- Filter wiring -------- */
+
         searchInput.addEventListener("input", function () {
             state.search = searchInput.value.trim().toLowerCase();
             renderGrid();
@@ -125,7 +108,6 @@
             renderGrid();
         });
 
-        /* -------- Details modal -------- */
         var detailOverlay = document.getElementById("food-detail-overlay");
         var detailClose = document.getElementById("food-detail-close");
 
@@ -163,7 +145,7 @@
             return '<div class="food-detail-row"><span>' + escapeHtml(label) + '</span><span>' + escapeHtml(value) + '</span></div>';
         }
 
-        /* -------- Pantry toggle (delegated) + cross-tab sync -------- */
+       
         grid.addEventListener("click", function (e) {
             var addBtn = e.target.closest(".pantry-add-btn");
             var detailsBtn = e.target.closest(".food-details-btn");
@@ -185,7 +167,7 @@
             }
         });
 
-        // Keep pantry state in sync if it changes in another tab (e.g. the calculator page).
+       
         window.addEventListener("storage", function (e) {
             if (e.key === PantryService.STORAGE_KEY) {
                 grid.querySelectorAll(".pantry-add-btn").forEach(function (btn) {
@@ -194,7 +176,6 @@
             }
         });
 
-        /* -------- Rendering -------- */
 
         function populateCategoryOptions(foods) {
             var categories = Array.from(new Set(foods.map(function (f) { return f.category; }))).sort();
@@ -269,7 +250,7 @@
         }
     });
 
-    /* -------- Toast (reuses the shared #mm-toast element/classes) -------- */
+
     function showToast(message) {
         var toast = document.getElementById("mm-toast");
         if (!toast) return;
@@ -281,7 +262,7 @@
         }, 2200);
     }
 
-    /* -------- Shared small helpers (same as dashboard.js) -------- */
+
     function round1(n) {
         return Math.round(n * 10) / 10;
     }

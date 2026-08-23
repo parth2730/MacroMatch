@@ -1,13 +1,11 @@
-/* =========================================================
-   dashboard.js
-   ========================================================= */
+
 
 (function () {
     "use strict";
 
     document.addEventListener("DOMContentLoaded", function () {
 
-        /* -------- Session (soft gate: redirect if not logged in) -------- */
+        
         var currentUser = null;
         try {
             var raw = localStorage.getItem("mm_current_user");
@@ -30,7 +28,7 @@
             window.location.href = "index.html";
         });
 
-        /* -------- Navigate to calculator -------- */
+       
         function goToCalculator() {
             window.location.href = "calculator.html";
         }
@@ -40,7 +38,6 @@
             goToCalculator();
         });
 
-        /* -------- Today's log summary -------- */
         renderTodaySummary();
 
         function renderTodaySummary() {
@@ -97,7 +94,6 @@
             showToast("Removed from today's log.");
         });
 
-        /* -------- Saved meals count + modal -------- */
         function renderSavedCount() {
             var saved = MealStorageService.getSavedMeals();
             var el = document.getElementById("saved-meals-count");
@@ -154,7 +150,7 @@
             showToast("Removed from saved meals.");
         });
 
-        /* -------- Food database modal -------- */
+        
         var dbOverlay = document.getElementById("db-modal-overlay");
         document.getElementById("open-database-btn").addEventListener("click", function () {
             renderDatabaseTable();
@@ -190,9 +186,22 @@
                 tbody.appendChild(tr);
             });
         }
+
+        
+        window.addEventListener("storage", function (e) {
+            if (e.key === MealStorageService.TODAY_LOG_KEY) {
+                renderTodaySummary();
+            }
+            if (e.key === MealStorageService.SAVED_MEALS_KEY) {
+                renderSavedCount();
+                if (savedOverlay.classList.contains("visible")) {
+                    renderSavedMealsModal();
+                }
+            }
+        });
     });
 
-    /* -------- Toast (reuses the shared #mm-toast element/classes) -------- */
+   
     function showToast(message) {
         var toast = document.getElementById("mm-toast");
         if (!toast) return;
@@ -204,7 +213,7 @@
         }, 2200);
     }
 
-    /* -------- Shared small helpers -------- */
+    
     function round1(n) {
         return Math.round(n * 10) / 10;
     }

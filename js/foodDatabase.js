@@ -1,42 +1,14 @@
-/* =========================================================
-   foodDatabaseService.js
-   -------------------------------------------------------
-   LocalStorage-backed food/meal database for MacroMatch.
 
-   Responsibilities:
-   - Seed LocalStorage with a starter dataset on first load
-     (never overwrites existing/customized data)
-   - Provide read access to the food database
-   - Provide small write helpers (add/reset) for later use
-
-   Storage key: "mm_food_database"
-   ========================================================= */
 
 (function (global) {
     "use strict";
 
     var STORAGE_KEY = "mm_food_database";
     var VERSION_KEY = "mm_food_database_version";
-    // Bump this whenever SEED_FOODS changes in a way that old cached
-    // LocalStorage data (from a previous version of this file) would
-    // no longer match -- e.g. the vegan/vegetarian/non-vegetarian
-    // hierarchy fix below. This makes sure returning users automatically
-    // get the corrected dataset instead of being stuck on a stale copy.
+  
     var DATA_VERSION = 2;
 
-    /* ---------------------------------------------------
-       Seed dataset (~85 items).
-       diet: "vegan" | "vegetarian" | "non-vegetarian"
-         - "vegan" items are also valid for vegetarian &
-           non-vegetarian searches
-         - "vegetarian" items are valid for vegetarian &
-           non-vegetarian searches, but NOT vegan
-         - "non-vegetarian" items only show for the
-           non-vegetarian selection
-       unit: "g" | "ml" | "piece"
-       servingSize: the amount the nutrition values below
-       refer to (e.g. 100 g, 1 piece)
-    --------------------------------------------------- */
+
     var SEED_FOODS = [
 { id: "food_001", name: "White Rice (cooked)", category: "Grain", diet: "vegan", mealTypes: ["lunch", "dinner"], servingSize: 100, unit: "g", calories: 130, protein: 2.7, carbs: 28.2, fat: 0.3 },
 
@@ -339,9 +311,7 @@
 { id: "food_150", name: "Whole Wheat Paratha", category: "Grain", diet: "vegetarian", mealTypes: ["breakfast", "lunch"], servingSize: 80, unit: "g", calories: 260, protein: 6.0, carbs: 35.0, fat: 11.0 },
     ];
 
-    /* ---------------------------------------------------
-       Core storage helpers
-    --------------------------------------------------- */
+  
     function safeParse(raw, fallback) {
         try {
             var parsed = JSON.parse(raw);
@@ -364,24 +334,18 @@
             var storedVersion = window.localStorage.getItem(VERSION_KEY);
             var existing = window.localStorage.getItem(STORAGE_KEY);
 
-            // No cached data yet -> seed fresh.
             if (existing === null) {
                 return reseed();
             }
 
-            // Cached data exists, but it predates data versioning (or was
-            // seeded by an older build of this file) -> refresh it so
-            // fixes like the vegan/vegetarian/non-vegetarian hierarchy
-            // actually reach users who already had a database saved.
+            
             if (storedVersion === null || parseInt(storedVersion, 10) !== DATA_VERSION) {
                 return reseed();
             }
 
             var parsed = safeParse(existing, null);
             if (parsed === null || parsed.length === 0) {
-                // corrupted or empty -> reseed, but don't silently destroy
-                // anything that looks intentional (empty array from user
-                // action is still respected once, but null/invalid is not).
+              
                 return reseed();
             }
             return parsed;
@@ -424,7 +388,7 @@
         count: count
     };
 
-    // Initialize immediately on script load so the DB is always ready.
+
     init();
 
 })(window);

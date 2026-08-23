@@ -1,13 +1,4 @@
-/* =========================================================
-   mealStorageService.js
-   -------------------------------------------------------
-   LocalStorage layer for:
-     - Saved meals ("Save Meal" button)     -> mm_saved_meals
-     - Today's meal log ("Add to Today's Log") -> mm_today_log
 
-   Both are namespaced under "mm_" to sit alongside
-   mm_food_database and match the rest of the app.
-   ========================================================= */
 
 (function (global) {
     "use strict";
@@ -44,7 +35,7 @@
         }
     }
 
-    /* ---------------- Saved meals ---------------- */
+
 
     function getSavedMeals() {
         return readArray(SAVED_MEALS_KEY);
@@ -79,7 +70,7 @@
         return saved;
     }
 
-    /* ---------------- Today's log ---------------- */
+    
 
     function getTodayLog() {
         var log = readArray(TODAY_LOG_KEY);

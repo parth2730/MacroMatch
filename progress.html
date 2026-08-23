@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress - MacroMatch</title>
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/progress.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </a>
+        <nav class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="calculator.html">Meal Calculator</a>
+            <a href="foods.html">Food Explorer</a>
+            <a href="progress.html" class="active">Progress</a>
+        </nav>
+        <div class="nav-actions">
+            <span class="nav-user" id="nav-user">Welcome</span>
+            <button class="btn btn-secondary" id="logout-btn">Log out</button>
+        </div>
+    </header>
+
+    <main class="progress-main">
+
+        <section class="progress-hero">
+            <span class="section-label">PROGRESS</span>
+            <h1>Progress &amp; Analytics</h1>
+            <p class="progress-subtext">
+                Everything here is calculated from your logged meals &mdash; log a meal from the
+                calculator and these numbers update immediately.
+            </p>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span class="small-label">AVERAGE DAILY CALORIES</span>
+                <strong id="stat-avg-calories">0 kcal</strong>
+            </div>
+            <div class="stat-card">
+                <span class="small-label">AVERAGE PROTEIN</span>
+                <strong id="stat-avg-protein">0 g</strong>
+            </div>
+            <div class="stat-card">
+                <span class="small-label">GOAL COMPLETION</span>
+                <strong id="stat-goal-completion">0%</strong>
+            </div>
+            <div class="stat-card">
+                <span class="small-label">BEST DAY THIS WEEK</span>
+                <strong id="stat-best-day">&mdash;</strong>
+            </div>
+        </section>
+
+        <section class="progress-card">
+            <h2>Today's progress</h2>
+            <div class="progress-rows">
+                <div class="progress-row-item">
+                    <div class="progress-row-head">
+                        <span>Calories</span>
+                        <span id="today-cal-label">0 / 0 kcal</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill cal" id="today-cal-fill"></div></div>
+                </div>
+                <div class="progress-row-item">
+                    <div class="progress-row-head">
+                        <span>Protein</span>
+                        <span id="today-protein-label">0 / 0 g</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill protein" id="today-protein-fill"></div></div>
+                </div>
+                <div class="progress-row-item">
+                    <div class="progress-row-head">
+                        <span>Carbs</span>
+                        <span id="today-carbs-label">0 / 0 g</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill carbs" id="today-carbs-fill"></div></div>
+                </div>
+                <div class="progress-row-item">
+                    <div class="progress-row-head">
+                        <span>Fat</span>
+                        <span id="today-fat-label">0 / 0 g</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill fat" id="today-fat-fill"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="charts-grid">
+            <div class="chart-card">
+                <h2>Weekly calories</h2>
+                <div class="chart-wrap" id="weekly-calories-chart"></div>
+            </div>
+            <div class="chart-card">
+                <h2>Weekly protein</h2>
+                <div class="chart-wrap" id="weekly-protein-chart"></div>
+            </div>
+        </section>
+
+        <section class="macro-distribution-card">
+            <h2>Macro distribution today</h2>
+            <p class="macro-dist-empty" id="macro-dist-empty">Log a meal to see how your calories split across macros.</p>
+
+            <div class="macro-dist-body hidden" id="macro-dist-body">
+                <div class="macro-dist-bar" id="macro-dist-bar"></div>
+                <div class="macro-dist-legend" id="macro-dist-legend"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="logo">
+            <span class="logo-mark">M</span>
+            <span>MacroMatch</span>
+        </div>
+        <p>Reverse your macros. Build your meal.</p>
+    </footer>
+
+    <script src="js/mealStorage.js"></script>
+    <script src="js/progress.js"></script>
+</body>
+</html>

@@ -1,15 +1,4 @@
-/* =========================================================
-   pantryStorage.js
-   -------------------------------------------------------
-   Minimal "pantry" system so the "Use What I Have" option
-   has something real to restrict against. Kept intentionally
-   small: a flat list of food IDs the user says they have at
-   home. No existing pantry system was found in the project,
-   so this is a fresh, modular addition that can be swapped
-   for a backend later.
 
-   Storage key: "mm_pantry"
-   ========================================================= */
 
 (function (global) {
     "use strict";
