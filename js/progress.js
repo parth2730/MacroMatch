@@ -1,17 +1,43 @@
+<<<<<<< HEAD
 
+=======
+/* =========================================================
+   progress.js
+   -------------------------------------------------------
+   Reads:
+     - "mm_daily_goal"       (same key/shape calculator.js writes)
+     - MealStorageService.getFullLog() (mm_today_log, all dates)
+
+   Renders:
+     - 4 stat cards (avg calories, avg protein, goal completion,
+       best day) computed over the current Sun-Sat week
+     - Today's progress bars (calories/protein/carbs/fat vs goal)
+     - Two weekly line charts (calories, protein), Sun-Sat
+     - Today's macro calorie-split bar + legend
+   ========================================================= */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
 (function () {
     "use strict";
 
     var DAILY_GOAL_KEY = "mm_daily_goal";
+<<<<<<< HEAD
 
+=======
+    // Keep this identical to calculator.js's DEFAULT_GOAL so both
+    // pages agree on what "no goal saved yet" means.
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
     var DEFAULT_GOAL = { calories: 2200, protein: 150, carbs: 220, fat: 65 };
 
     var DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     document.addEventListener("DOMContentLoaded", function () {
 
+<<<<<<< HEAD
         
+=======
+        /* -------- Session (soft gate, same pattern as dashboard.js) -------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
         var currentUser = null;
         try {
             var raw = localStorage.getItem("mm_current_user");
@@ -33,7 +59,11 @@
             window.location.href = "index.html";
         });
 
+<<<<<<< HEAD
     
+=======
+        /* -------- Load data + render -------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
         renderAll();
 
         function renderAll() {
@@ -53,7 +83,14 @@
             renderMacroDistribution(weekTotals[todayIndex]);
         }
 
+<<<<<<< HEAD
         
+=======
+        /* -------- Cross-tab sync --------
+           If a meal is logged (or the goal is edited) in another tab,
+           the browser fires "storage" here automatically. Just re-run
+           the same render pipeline against the fresh localStorage data. */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
         window.addEventListener("storage", function (e) {
             if (e.key === MealStorageService.TODAY_LOG_KEY || e.key === DAILY_GOAL_KEY) {
                 renderAll();
@@ -61,7 +98,11 @@
         });
     });
 
+<<<<<<< HEAD
 
+=======
+    /* ---------------- Goal ---------------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
     function getGoal() {
         try {
@@ -74,7 +115,11 @@
         }
     }
 
+<<<<<<< HEAD
     
+=======
+    /* ---------------- Date helpers ---------------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
     function parseDateStr(s) {
         var parts = s.split("-");
@@ -87,7 +132,11 @@
             String(d.getDate()).padStart(2, "0");
     }
 
+<<<<<<< HEAD
     
+=======
+    // Returns the 7 date strings (Sun -> Sat) for the week containing todayStr.
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
     function getWeekDateStrings(todayStr) {
         var today = parseDateStr(todayStr);
         var sunday = new Date(today);
@@ -118,7 +167,11 @@
         return totals.calories > 0 || totals.protein > 0 || totals.carbs > 0 || totals.fat > 0;
     }
 
+<<<<<<< HEAD
  
+=======
+    /* ---------------- Stat cards ---------------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
     function renderStatCards(goal, weekDateStrs, weekTotals) {
         var loggedDays = weekTotals.filter(hasAnyLog);
@@ -146,6 +199,11 @@
         avgCaloriesEl.textContent = Math.round(avgCalories) + " kcal";
         avgProteinEl.textContent = round1(avgProtein) + " g";
 
+<<<<<<< HEAD
+=======
+        // Goal completion: average (capped at 100%) of each logged day's
+        // calorie total against the daily calorie goal.
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
         var completionSum = loggedDays.reduce(function (sum, t) {
             var pct = goal.calories > 0 ? (t.calories / goal.calories) * 100 : 0;
             return sum + Math.min(100, pct);
@@ -153,7 +211,11 @@
         var goalCompletion = Math.round(completionSum / loggedDays.length);
         goalCompletionEl.textContent = goalCompletion + "%";
 
+<<<<<<< HEAD
 
+=======
+        // Best day: highest calorie total among days that have a log.
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
         var bestIndex = -1;
         var bestCalories = -1;
         weekTotals.forEach(function (t, i) {
@@ -165,6 +227,10 @@
         bestDayEl.textContent = bestIndex >= 0 ? DAY_LABELS[bestIndex] : "\u2014";
     }
 
+<<<<<<< HEAD
+=======
+    /* ---------------- Today's progress bars ---------------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
     function renderTodayProgress(goal, todayTotals) {
         setBar("cal", todayTotals.calories, goal.calories, "kcal", true);
@@ -187,7 +253,11 @@
         fill.style.width = pct + "%";
     }
 
+<<<<<<< HEAD
 
+=======
+    /* ---------------- Weekly line charts ---------------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
     function renderWeeklyCharts(weekTotals) {
         var calorieValues = weekTotals.map(function (t) { return t.calories; });
@@ -248,7 +318,11 @@
         );
     }
 
+<<<<<<< HEAD
    
+=======
+    // Rounds a value up to a "nice" axis maximum (10, 20, 50, 100, 200 ...).
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
     function niceCeil(v) {
         if (v <= 10) return 10;
         var magnitude = Math.pow(10, Math.floor(Math.log10(v)));
@@ -261,7 +335,11 @@
         return niceNormalized * magnitude;
     }
 
+<<<<<<< HEAD
     
+=======
+    /* ---------------- Macro distribution (today) ---------------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
     function renderMacroDistribution(todayTotals) {
         var emptyEl = document.getElementById("macro-dist-empty");
@@ -307,7 +385,11 @@
         );
     }
 
+<<<<<<< HEAD
    
+=======
+    /* ---------------- Shared small helpers (same as dashboard.js) ---------------- */
+>>>>>>> 1f051cc050d646745639f1017e51b5becca3700f
 
     function round1(n) {
         return Math.round(n * 10) / 10;
