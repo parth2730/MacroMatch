@@ -13,47 +13,15 @@
         lowCalorie: false
     };
 
-    var foodsCache = null; 
-
     function loadFoods() {
-        if (foodsCache) return foodsCache;
-        foodsCache = (async function () {
-            var response = await fetch("foods.json");
-            if (!response.ok) {
-                throw new Error("Request failed with status " + response.status);
-            }
-            var data = await response.json();
-            if (!Array.isArray(data)) {
-                throw new Error("Unexpected food data format.");
-            }
-            return data;
-        })();
-        return foodsCache;
+        return FoodDatabaseService.getAll();
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function () {
 
-
-        var currentUser = null;
-        try {
-            var raw = localStorage.getItem("mm_current_user");
-            currentUser = raw ? JSON.parse(raw) : null;
-        } catch (err) {
-            currentUser = null;
-        }
-
-        if (!currentUser) {
-            window.location.href = "login.html";
-            return;
-        }
-
-        var displayName = currentUser.name || (currentUser.email ? currentUser.email.split("@")[0] : "there");
-        document.getElementById("nav-user").innerHTML = "Hi, <strong>" + escapeHtml(displayName) + "</strong>";
-
-        document.getElementById("logout-btn").addEventListener("click", function () {
-            localStorage.removeItem("mm_current_user");
-            window.location.href = "index.html";
-        });
+        var currentUser = await Auth.requireUser();
+        if (!currentUser) return;
+        Auth.mountNav(currentUser);
 
         var grid = document.getElementById("foods-grid");
         var resultCount = document.getElementById("result-count");
@@ -65,14 +33,15 @@
 
         renderStatus("Loading foods\u2026", false);
 
-        loadFoods().then(function (foods) {
-            state.allFoods = foods;
-            populateCategoryOptions(foods);
+        try {
+            var loaded = await Promise.all([loadFoods(), PantryService.load()]);
+            state.allFoods = loaded[0];
+            populateCategoryOptions(state.allFoods);
             renderGrid();
-        }).catch(function (err) {
-            console.warn("Could not load foods.json", err);
+        } catch (err) {
+            console.warn("Could not load foods.", err);
             renderStatus("Couldn't load the food database. Please try refreshing the page.", true);
-        });
+        }
 
 
         searchInput.addEventListener("input", function () {
@@ -146,7 +115,7 @@
         }
 
        
-        grid.addEventListener("click", function (e) {
+        grid.addEventListener("click", async function (e) {
             var addBtn = e.target.closest(".pantry-add-btn");
             var detailsBtn = e.target.closest(".food-details-btn");
 
@@ -154,25 +123,24 @@
                 var foodId = addBtn.dataset.foodId;
                 var food = state.allFoods.find(function (f) { return f.id === foodId; });
                 if (!food) return;
-                PantryService.toggle(foodId);
-                var nowInPantry = PantryService.has(foodId);
-                updatePantryButton(addBtn, nowInPantry);
-                showToast(nowInPantry ? (food.name + " added to pantry.") : (food.name + " removed from pantry."));
+
+                addBtn.disabled = true;
+                try {
+                    await PantryService.toggle(foodId);
+                    var nowInPantry = PantryService.has(foodId);
+                    updatePantryButton(addBtn, nowInPantry);
+                    showToast(nowInPantry ? (food.name + " added to pantry.") : (food.name + " removed from pantry."));
+                } catch (err) {
+                    showToast(err.message || "Could not update your pantry.");
+                } finally {
+                    addBtn.disabled = false;
+                }
                 return;
             }
 
             if (detailsBtn) {
                 var detailFood = state.allFoods.find(function (f) { return f.id === detailsBtn.dataset.foodId; });
                 if (detailFood) openDetailModal(detailFood);
-            }
-        });
-
-       
-        window.addEventListener("storage", function (e) {
-            if (e.key === PantryService.STORAGE_KEY) {
-                grid.querySelectorAll(".pantry-add-btn").forEach(function (btn) {
-                    updatePantryButton(btn, PantryService.has(btn.dataset.foodId));
-                });
             }
         });
 

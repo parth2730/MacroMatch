@@ -358,6 +358,7 @@ body {
         <p>Reverse your macros. Build your meal.</p>
     </footer>
 
+    <script src="js/api.js"></script>
     <script>
 const loginButton = document.querySelector(".btn-login");
 const getStartedButton = document.querySelector(".nav-actions .btn-primary");
@@ -396,27 +397,7 @@ function isValidEmail(email) {
     return email.includes("@") && email.includes(".");
 }
 
-var USERS_KEY = "mm_users";
-
-function getUsers() {
-    try {
-        var raw = localStorage.getItem(USERS_KEY);
-        var parsed = raw ? JSON.parse(raw) : [];
-        return Array.isArray(parsed) ? parsed : [];
-    } catch (err) {
-        return [];
-    }
-}
-
-function saveUsers(users) {
-    try {
-        localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    } catch (err) {
-        console.warn("Could not persist users list to LocalStorage.", err);
-    }
-}
-
-signupForm.addEventListener("submit", function(event) {
+signupForm.addEventListener("submit", async function(event) {
     event.preventDefault();
 
     const name = document.getElementById("signup-name").value.trim();
@@ -476,31 +457,28 @@ signupForm.addEventListener("submit", function(event) {
         return;
     }
 
-    var users = getUsers();
-    var existingUser = users.find(function (u) {
-        return u.email.toLowerCase() === email.toLowerCase();
-    });
+    const submitButton = signupForm.querySelector("button[type='submit']");
+    if (submitButton) submitButton.disabled = true;
 
-    if (existingUser) {
-        signupMessage.textContent = "An account with this email already exists. Please login instead.";
+    try {
+        await Api.post("/auth/signup", {
+            name: name,
+            email: email,
+            password: password
+        });
+
+        signupMessage.textContent = "Account created! Redirecting to login...";
+        signupMessage.classList.add("success-message");
+
+        setTimeout(function () {
+            window.location.href = "login.html";
+        }, 900);
+    } catch (err) {
+        signupMessage.textContent = err.message || "Could not create your account. Please try again.";
         signupMessage.classList.remove("success-message");
-        return;
+    } finally {
+        if (submitButton) submitButton.disabled = false;
     }
-
-    users.push({
-        name: name,
-        email: email,
-        password: password,
-        createdAt: new Date().toISOString()
-    });
-    saveUsers(users);
-
-    signupMessage.textContent = "Account created! Redirecting to login...";
-    signupMessage.classList.add("success-message");
-
-    setTimeout(function () {
-        window.location.href = "login.html";
-    }, 900);
 });
     </script>
 </body>

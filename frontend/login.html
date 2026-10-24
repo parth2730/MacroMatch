@@ -381,6 +381,7 @@
         </p>
     </footer>
 
+    <script src="js/api.js"></script>
     <script>
         const loginButton = document.querySelector(".btn-login");
         const getStartedButton = document.querySelector(".nav-actions .btn-primary");
@@ -419,19 +420,7 @@
             return email.includes("@") && email.includes(".");
         }
 
-        var USERS_KEY = "mm_users";
-
-        function getUsers() {
-            try {
-                var raw = localStorage.getItem(USERS_KEY);
-                var parsed = raw ? JSON.parse(raw) : [];
-                return Array.isArray(parsed) ? parsed : [];
-            } catch (err) {
-                return [];
-            }
-        }
-
-        loginForm.addEventListener("submit", function(event) {
+        loginForm.addEventListener("submit", async function(event) {
             event.preventDefault();
 
             const email = document.getElementById("login-email").value.trim();
@@ -455,37 +444,24 @@
                 return;
             }
 
-            var users = getUsers();
-            var matchedUser = users.find(function (u) {
-                return u.email.toLowerCase() === email.toLowerCase();
-            });
-
-            if (!matchedUser) {
-                loginMessage.textContent = "No account found with this email. Please sign up first.";
-                return;
-            }
-
-            if (matchedUser.password !== password) {
-                loginMessage.textContent = "Incorrect password. Please try again.";
-                return;
-            }
-
-            loginMessage.textContent = "Login successful! Redirecting...";
-            loginMessage.classList.add("success-message");
+            const submitButton = loginForm.querySelector("button[type='submit']");
+            if (submitButton) submitButton.disabled = true;
 
             try {
-                localStorage.setItem("mm_current_user", JSON.stringify({
-                    name: matchedUser.name,
-                    email: matchedUser.email,
-                    loggedInAt: new Date().toISOString()
-                }));
-            } catch (err) {
-                console.warn("Could not persist session to LocalStorage.", err);
-            }
+                await Api.post("/auth/login", { email: email, password: password });
 
-            setTimeout(function () {
-                window.location.href = "dashboard.html";
-            }, 500);
+                loginMessage.textContent = "Login successful! Redirecting...";
+                loginMessage.classList.add("success-message");
+
+                setTimeout(function () {
+                    window.location.href = "dashboard.html";
+                }, 500);
+            } catch (err) {
+                loginMessage.textContent = err.message || "Login failed. Please try again.";
+                loginMessage.classList.remove("success-message");
+            } finally {
+                if (submitButton) submitButton.disabled = false;
+            }
         });
     </script>
 

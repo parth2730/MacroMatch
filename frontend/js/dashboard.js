@@ -1,34 +1,15 @@
-
-
 (function () {
     "use strict";
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function () {
 
-        
-        var currentUser = null;
-        try {
-            var raw = localStorage.getItem("mm_current_user");
-            currentUser = raw ? JSON.parse(raw) : null;
-        } catch (err) {
-            currentUser = null;
-        }
+        var currentUser = await Auth.requireUser();
+        if (!currentUser) return;
+        Auth.mountNav(currentUser);
 
-        if (!currentUser) {
-            window.location.href = "login.html";
-            return;
-        }
+        document.getElementById("welcome-heading").textContent =
+            "Welcome back, " + Auth.displayName(currentUser) + ".";
 
-        var displayName = currentUser.name || (currentUser.email ? currentUser.email.split("@")[0] : "there");
-        document.getElementById("nav-user").innerHTML = "Hi, <strong>" + escapeHtml(displayName) + "</strong>";
-        document.getElementById("welcome-heading").textContent = "Welcome back, " + displayName + ".";
-
-        document.getElementById("logout-btn").addEventListener("click", function () {
-            localStorage.removeItem("mm_current_user");
-            window.location.href = "index.html";
-        });
-
-       
         function goToCalculator() {
             window.location.href = "calculator.html";
         }
@@ -38,10 +19,18 @@
             goToCalculator();
         });
 
-        renderTodaySummary();
+        async function renderTodaySummary() {
+            var totals;
+            var todayLog;
 
-        function renderTodaySummary() {
-            var totals = MealStorageService.getTodayTotals();
+            try {
+                totals = await MealStorageService.getTodayTotals();
+                todayLog = await MealStorageService.getTodayLog();
+            } catch (err) {
+                showToast(err.message || "Could not load today's summary.");
+                return;
+            }
+
             document.getElementById("today-date").textContent = new Date().toLocaleDateString(undefined, {
                 weekday: "long", month: "short", day: "numeric"
             });
@@ -50,7 +39,6 @@
             document.getElementById("today-carbs").textContent = round1(totals.carbs);
             document.getElementById("today-fat").textContent = round1(totals.fat);
 
-            var todayLog = MealStorageService.getTodayLog();
             var note = document.getElementById("empty-log-note");
             var section = document.getElementById("today-log-section");
             var list = document.getElementById("today-log-list");
@@ -86,27 +74,36 @@
             });
         }
 
-        document.getElementById("today-log-list").addEventListener("click", function (e) {
+        document.getElementById("today-log-list").addEventListener("click", async function (e) {
             var deleteBtn = e.target.closest(".log-item-delete-btn");
             if (!deleteBtn) return;
-            MealStorageService.removeFromLog(deleteBtn.dataset.logId);
-            renderTodaySummary();
-            showToast("Removed from today's log.");
+            deleteBtn.disabled = true;
+            try {
+                await MealStorageService.removeFromLog(deleteBtn.dataset.logId);
+                await renderTodaySummary();
+                showToast("Removed from today's log.");
+            } catch (err) {
+                deleteBtn.disabled = false;
+                showToast(err.message || "Could not remove the meal.");
+            }
         });
 
-        function renderSavedCount() {
-            var saved = MealStorageService.getSavedMeals();
+        async function renderSavedCount() {
             var el = document.getElementById("saved-meals-count");
-            el.textContent = saved.length === 0
-                ? "No meals saved yet."
-                : saved.length + " meal" + (saved.length === 1 ? "" : "s") + " saved.";
+            try {
+                var saved = await MealStorageService.getSavedMeals();
+                el.textContent = saved.length === 0
+                    ? "No meals saved yet."
+                    : saved.length + " meal" + (saved.length === 1 ? "" : "s") + " saved.";
+            } catch (err) {
+                el.textContent = "Could not load saved meals.";
+            }
         }
-        renderSavedCount();
 
         var savedOverlay = document.getElementById("saved-modal-overlay");
-        document.getElementById("view-saved-btn").addEventListener("click", function () {
-            renderSavedMealsModal();
+        document.getElementById("view-saved-btn").addEventListener("click", async function () {
             savedOverlay.classList.add("visible");
+            await renderSavedMealsModal();
         });
         document.getElementById("saved-modal-close").addEventListener("click", function () {
             savedOverlay.classList.remove("visible");
@@ -115,9 +112,16 @@
             if (e.target === savedOverlay) savedOverlay.classList.remove("visible");
         });
 
-        function renderSavedMealsModal() {
+        async function renderSavedMealsModal() {
             var body = document.getElementById("saved-modal-body");
-            var saved = MealStorageService.getSavedMeals();
+            var saved;
+
+            try {
+                saved = await MealStorageService.getSavedMeals();
+            } catch (err) {
+                body.innerHTML = '<p class="empty-state-text">Could not load saved meals.</p>';
+                return;
+            }
 
             if (saved.length === 0) {
                 body.innerHTML = '<p class="empty-state-text">You haven\'t saved any meals yet. Generate a meal in the calculator and hit "Save Meal".</p>';
@@ -141,20 +145,29 @@
             });
         }
 
-        document.getElementById("saved-modal-body").addEventListener("click", function (e) {
+        document.getElementById("saved-modal-body").addEventListener("click", async function (e) {
             var deleteBtn = e.target.closest(".log-item-delete-btn");
             if (!deleteBtn) return;
-            MealStorageService.removeSavedMeal(deleteBtn.dataset.savedId);
-            renderSavedMealsModal();
-            renderSavedCount();
-            showToast("Removed from saved meals.");
+            deleteBtn.disabled = true;
+            try {
+                await MealStorageService.removeSavedMeal(deleteBtn.dataset.savedId);
+                await renderSavedMealsModal();
+                await renderSavedCount();
+                showToast("Removed from saved meals.");
+            } catch (err) {
+                deleteBtn.disabled = false;
+                showToast(err.message || "Could not remove the saved meal.");
+            }
         });
 
-        
         var dbOverlay = document.getElementById("db-modal-overlay");
-        document.getElementById("open-database-btn").addEventListener("click", function () {
-            renderDatabaseTable();
+        document.getElementById("open-database-btn").addEventListener("click", async function () {
             dbOverlay.classList.add("visible");
+            try {
+                await renderDatabaseTable();
+            } catch (err) {
+                showToast(err.message || "Could not load the food database.");
+            }
         });
         document.getElementById("db-modal-close").addEventListener("click", function () {
             dbOverlay.classList.remove("visible");
@@ -163,8 +176,8 @@
             if (e.target === dbOverlay) dbOverlay.classList.remove("visible");
         });
 
-        function renderDatabaseTable() {
-            var foods = FoodDatabaseService.getAll();
+        async function renderDatabaseTable() {
+            var foods = await FoodDatabaseService.getAll();
             document.getElementById("db-modal-subtitle").textContent =
                 foods.length + " foods available to the recommendation engine.";
 
@@ -187,21 +200,9 @@
             });
         }
 
-        
-        window.addEventListener("storage", function (e) {
-            if (e.key === MealStorageService.TODAY_LOG_KEY) {
-                renderTodaySummary();
-            }
-            if (e.key === MealStorageService.SAVED_MEALS_KEY) {
-                renderSavedCount();
-                if (savedOverlay.classList.contains("visible")) {
-                    renderSavedMealsModal();
-                }
-            }
-        });
+        await Promise.all([renderTodaySummary(), renderSavedCount()]);
     });
 
-   
     function showToast(message) {
         var toast = document.getElementById("mm-toast");
         if (!toast) return;
@@ -213,7 +214,6 @@
         }, 2200);
     }
 
-    
     function round1(n) {
         return Math.round(n * 10) / 10;
     }

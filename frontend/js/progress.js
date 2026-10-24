@@ -3,45 +3,29 @@
 (function () {
     "use strict";
 
-    var DAILY_GOAL_KEY = "mm_daily_goal";
-
     var DEFAULT_GOAL = { calories: 2200, protein: 150, carbs: 220, fat: 65 };
 
     var DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function () {
 
-        
-        var currentUser = null;
-        try {
-            var raw = localStorage.getItem("mm_current_user");
-            currentUser = raw ? JSON.parse(raw) : null;
-        } catch (err) {
-            currentUser = null;
-        }
+        var currentUser = await Auth.requireUser();
+        if (!currentUser) return;
+        Auth.mountNav(currentUser);
 
-        if (!currentUser) {
-            window.location.href = "login.html";
-            return;
-        }
+        await renderAll();
 
-        var displayName = currentUser.name || (currentUser.email ? currentUser.email.split("@")[0] : "there");
-        document.getElementById("nav-user").innerHTML = "Hi, <strong>" + escapeHtml(displayName) + "</strong>";
-
-        document.getElementById("logout-btn").addEventListener("click", function () {
-            localStorage.removeItem("mm_current_user");
-            window.location.href = "index.html";
-        });
-
-    
-        renderAll();
-
-        function renderAll() {
-            var goal = getGoal();
-            var fullLog = MealStorageService.getFullLog();
+        async function renderAll() {
+            var goal = await getGoal();
+            var fullLog = [];
+            try {
+                fullLog = await MealStorageService.getFullLog();
+            } catch (err) {
+                console.warn("Could not load meal history.", err);
+            }
             var todayStr = MealStorageService.todayString();
 
-            var weekDateStrs = getWeekDateStrings(todayStr);      // [Sun..Sat] "YYYY-MM-DD"
+            var weekDateStrs = getWeekDateStrings(todayStr);
             var todayIndex = weekDateStrs.indexOf(todayStr);
             var weekTotals = weekDateStrs.map(function (ds) {
                 return totalsForDate(fullLog, ds);
@@ -52,23 +36,14 @@
             renderWeeklyCharts(weekTotals);
             renderMacroDistribution(weekTotals[todayIndex]);
         }
-
-        
-        window.addEventListener("storage", function (e) {
-            if (e.key === MealStorageService.TODAY_LOG_KEY || e.key === DAILY_GOAL_KEY) {
-                renderAll();
-            }
-        });
     });
 
 
 
-    function getGoal() {
+    async function getGoal() {
         try {
-            var raw = localStorage.getItem(DAILY_GOAL_KEY);
-            if (!raw) return Object.assign({}, DEFAULT_GOAL);
-            var parsed = JSON.parse(raw);
-            return Object.assign({}, DEFAULT_GOAL, parsed);
+            var data = await Api.get("/goal");
+            return Object.assign({}, DEFAULT_GOAL, data.goal);
         } catch (err) {
             return Object.assign({}, DEFAULT_GOAL);
         }

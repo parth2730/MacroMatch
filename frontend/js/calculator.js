@@ -1,8 +1,8 @@
 (function () {
     "use strict";
 
-    var DAILY_GOAL_KEY = "mm_daily_goal";
     var DEFAULT_GOAL = { calories: 2200, protein: 150, carbs: 220, fat: 65 };
+    var TOLERANCE_PERCENT = 8;
 
     var state = {
         mealType: "lunch",
@@ -11,28 +11,12 @@
         useWhatIHave: false
     };
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", async function () {
 
-        
-        var currentUser = null;
-        try {
-            var raw = localStorage.getItem("mm_current_user");
-            currentUser = raw ? JSON.parse(raw) : null;
-        } catch (err) {
-            currentUser = null;
-        }
-        if (!currentUser) {
-            window.location.href = "login.html";
-            return;
-        }
-        var displayName = currentUser.name || (currentUser.email ? currentUser.email.split("@")[0] : "there");
-        document.getElementById("nav-user").innerHTML = "Hi, <strong>" + escapeHtml(displayName) + "</strong>";
-        document.getElementById("logout-btn").addEventListener("click", function () {
-            localStorage.removeItem("mm_current_user");
-            window.location.href = "index.html";
-        });
+        var currentUser = await Auth.requireUser();
+        if (!currentUser) return;
+        Auth.mountNav(currentUser);
 
-        
         var els = {
             calories: document.getElementById("input-calories"),
             protein: document.getElementById("input-protein"),
@@ -61,25 +45,23 @@
             resultsList: document.getElementById("results-list")
         };
 
-        
-        function getGoal() {
+        async function getGoal() {
             try {
-                var raw = localStorage.getItem(DAILY_GOAL_KEY);
-                if (!raw) return Object.assign({}, DEFAULT_GOAL);
-                var parsed = JSON.parse(raw);
-                return Object.assign({}, DEFAULT_GOAL, parsed);
+                var data = await Api.get("/goal");
+                return Object.assign({}, DEFAULT_GOAL, data.goal);
             } catch (err) {
+                console.warn("Could not load daily goal.", err);
                 return Object.assign({}, DEFAULT_GOAL);
             }
         }
 
-        function saveGoal(goal) {
-            localStorage.setItem(DAILY_GOAL_KEY, JSON.stringify(goal));
+        async function saveGoal(goal) {
+            await Api.put("/goal", goal);
         }
 
-        function getRemainingTarget() {
-            var goal = getGoal();
-            var loggedToday = MealStorageService.getTodayTotals();
+        async function getRemainingTarget() {
+            var goal = await getGoal();
+            var loggedToday = await MealStorageService.getTodayTotals();
             return {
                 calories: Math.max(0, Math.round(goal.calories - loggedToday.calories)),
                 protein: Math.max(0, Math.round((goal.protein - loggedToday.protein) * 10) / 10),
@@ -88,8 +70,8 @@
             };
         }
 
-        function renderRemainingTarget() {
-            var remaining = getRemainingTarget();
+        async function renderRemainingTarget() {
+            var remaining = await getRemainingTarget();
             els.remainingCalories.textContent = remaining.calories + " kcal";
             els.remainingProtein.textContent = remaining.protein + " g";
             els.remainingCarbs.textContent = remaining.carbs + " g";
@@ -97,23 +79,27 @@
             return remaining;
         }
 
-        function prefillInputsFromRemaining() {
-            var remaining = getRemainingTarget();
-            // Default a single meal's target to roughly a quarter of what's left.
+        async function prefillInputsFromRemaining() {
+            var remaining = await getRemainingTarget();
             els.calories.value = Math.max(0, Math.round(remaining.calories / 4));
             els.protein.value = Math.max(0, Math.round(remaining.protein / 4));
             els.carbs.value = Math.max(0, Math.round(remaining.carbs / 4));
             els.fat.value = Math.max(0, Math.round(remaining.fat / 4));
         }
 
-        renderRemainingTarget();
-        prefillInputsFromRemaining();
+        try {
+            await PantryService.load();
+        } catch (err) {
+            console.warn("Could not load pantry.", err);
+        }
 
-        els.toleranceValue.textContent = RecommendationEngine.TOLERANCE_PERCENT;
+        await renderRemainingTarget();
+        await prefillInputsFromRemaining();
 
-        
-        els.editGoalBtn.addEventListener("click", function () {
-            var goal = getGoal();
+        els.toleranceValue.textContent = TOLERANCE_PERCENT;
+
+        els.editGoalBtn.addEventListener("click", async function () {
+            var goal = await getGoal();
             els.goalCalories.value = goal.calories;
             els.goalProtein.value = goal.protein;
             els.goalCarbs.value = goal.carbs;
@@ -121,20 +107,23 @@
             els.goalEditor.hidden = !els.goalEditor.hidden;
         });
 
-        els.saveGoalBtn.addEventListener("click", function () {
+        els.saveGoalBtn.addEventListener("click", async function () {
             var goal = {
                 calories: parseFloat(els.goalCalories.value) || DEFAULT_GOAL.calories,
                 protein: parseFloat(els.goalProtein.value) || DEFAULT_GOAL.protein,
                 carbs: parseFloat(els.goalCarbs.value) || DEFAULT_GOAL.carbs,
                 fat: parseFloat(els.goalFat.value) || DEFAULT_GOAL.fat
             };
-            saveGoal(goal);
-            renderRemainingTarget();
-            els.goalEditor.hidden = true;
-            showToast("Daily goal updated.");
+            try {
+                await saveGoal(goal);
+                await renderRemainingTarget();
+                els.goalEditor.hidden = true;
+                showToast("Daily goal updated.");
+            } catch (err) {
+                showToast(err.message || "Could not update the daily goal.");
+            }
         });
 
-        
         function wirePillRow(rowEl, stateKey) {
             rowEl.querySelectorAll(".pill").forEach(function (pill) {
                 pill.addEventListener("click", function () {
@@ -147,13 +136,11 @@
         wirePillRow(els.mealTypeRow, "mealType");
         wirePillRow(els.dietRow, "diet");
 
-        
         els.maxItemsSlider.addEventListener("input", function () {
             state.maxItems = parseInt(els.maxItemsSlider.value, 10);
             els.maxItemsValue.textContent = state.maxItems;
         });
 
-        
         els.usePantry.addEventListener("change", function () {
             state.useWhatIHave = els.usePantry.checked;
             if (state.useWhatIHave && PantryService.getIds().length === 0) {
@@ -166,7 +153,6 @@
             openDatabaseModal(true);
         });
 
-        
         function validateInputs() {
             var values = {
                 calories: parseFloat(els.calories.value),
@@ -197,8 +183,7 @@
             return { valid: true, values: values };
         }
 
-        
-        els.generateBtn.addEventListener("click", function () {
+        els.generateBtn.addEventListener("click", async function () {
             els.error.textContent = "";
             var validation = validateInputs();
             if (!validation.valid) {
@@ -206,26 +191,33 @@
                 return;
             }
 
+            els.generateBtn.disabled = true;
             var result = null;
             var failed = false;
 
             try {
-                result = RecommendationEngine.generate(validation.values, {
+                result = await Api.post("/recommendations", Object.assign({}, validation.values, {
                     mealType: state.mealType,
                     diet: state.diet,
                     maxItems: state.maxItems,
                     useWhatIHave: state.useWhatIHave
-                });
+                }));
             } catch (err) {
-                console.error("Recommendation engine failed:", err);
+                console.error("Recommendation request failed:", err);
                 failed = true;
+                els.error.textContent = err.message || "Something went wrong generating meals. Please try again.";
+            } finally {
+                els.generateBtn.disabled = false;
             }
 
-            if (failed || !result || result.recommendations.length === 0) {
+            if (failed) {
                 showState("empty");
-                if (failed) {
-                    els.error.textContent = "Something went wrong generating meals. Please try again.";
-                } else if (result && result.reason === "empty-pantry") {
+                return;
+            }
+
+            if (!result || !result.recommendations || result.recommendations.length === 0) {
+                showState("empty");
+                if (result && result.reason === "empty-pantry") {
                     els.error.textContent = "Your pantry list is empty. Add items via \"Manage pantry list\" or turn off \"Use What I Have\".";
                 } else if (result && result.reason === "no-foods") {
                     els.error.textContent = "No foods in the database match this diet and meal type yet.";
@@ -236,7 +228,7 @@
             }
 
             try {
-                renderResults(result.recommendations);
+                await renderResults(result.recommendations);
                 showState("results");
             } catch (renderErr) {
                 console.error("Rendering results failed:", renderErr);
@@ -245,13 +237,11 @@
             }
         });
 
-        
         function showState(name) {
             els.stateEmpty.hidden = name !== "empty";
             els.resultsList.hidden = name !== "results";
         }
 
-       
         var RANK_META = [
             { badge: "🥇", label: "BEST MATCH", cardClass: "best-match" },
             { badge: "🥈", label: "OPTION 2", cardClass: "" },
@@ -260,7 +250,14 @@
             { badge: "🏅", label: "OPTION 5", cardClass: "" }
         ];
 
-        function renderResults(recommendations) {
+        async function renderResults(recommendations) {
+            var savedMeals = [];
+            try {
+                savedMeals = await MealStorageService.getSavedMeals();
+            } catch (err) {
+                console.warn("Could not load saved meals.", err);
+            }
+
             els.resultsList.innerHTML = "";
 
             recommendations.forEach(function (meal, index) {
@@ -309,44 +306,61 @@
                 var saveBtn = card.querySelector(".save-meal-btn");
                 var logBtn = card.querySelector(".add-log-btn");
 
-                if (MealStorageService.isMealSaved(meal)) {
+                if (MealStorageService.isMealSaved(meal, savedMeals)) {
                     saveBtn.classList.add("saved");
                     saveBtn.textContent = "♥ Saved";
                 }
 
-                saveBtn.addEventListener("click", function () {
-                    var res = MealStorageService.saveMeal(meal);
-                    if (res.added) {
-                        saveBtn.classList.add("saved");
-                        saveBtn.textContent = "♥ Saved";
-                        showToast("Meal saved.");
-                    } else {
-                        showToast("Already saved.");
+                saveBtn.addEventListener("click", async function () {
+                    saveBtn.disabled = true;
+                    try {
+                        var res = await MealStorageService.saveMeal(meal);
+                        if (res.added) {
+                            saveBtn.classList.add("saved");
+                            saveBtn.textContent = "♥ Saved";
+                            showToast("Meal saved.");
+                        } else {
+                            saveBtn.classList.add("saved");
+                            saveBtn.textContent = "♥ Saved";
+                            showToast("Already saved.");
+                        }
+                    } catch (err) {
+                        showToast(err.message || "Could not save the meal.");
+                    } finally {
+                        saveBtn.disabled = false;
                     }
                 });
 
-                logBtn.addEventListener("click", function () {
-                    MealStorageService.addToTodayLog(meal);
-                    logBtn.classList.add("added");
-                    logBtn.textContent = "✓ Added to Log";
+                logBtn.addEventListener("click", async function () {
                     logBtn.disabled = true;
-                    renderRemainingTarget();
-                    showToast("Added to today's log.");
+                    try {
+                        await MealStorageService.addToTodayLog(meal);
+                        logBtn.classList.add("added");
+                        logBtn.textContent = "✓ Added to Log";
+                        await renderRemainingTarget();
+                        showToast("Added to today's log.");
+                    } catch (err) {
+                        logBtn.disabled = false;
+                        showToast(err.message || "Could not add the meal to your log.");
+                    }
                 });
 
                 els.resultsList.appendChild(card);
             });
         }
 
-        
         var dbOverlay = document.getElementById("db-modal-overlay");
 
-        function openDatabaseModal(focusPantry) {
-            renderDatabaseTable();
-            dbOverlay.classList.add("visible");
+        async function openDatabaseModal(focusPantry) {
             if (focusPantry) {
                 document.getElementById("db-modal-subtitle").textContent =
                     "Tick \"Pantry\" next to any food you have at home, then enable \"Use What I Have\".";
+            }
+            dbOverlay.classList.add("visible");
+            try {
+                await renderDatabaseTable();
+            } catch (err) {
+                console.warn("Could not load food database.", err);
             }
         }
 
@@ -358,8 +372,8 @@
             if (e.target === dbOverlay) dbOverlay.classList.remove("visible");
         });
 
-        function renderDatabaseTable() {
-            var foods = FoodDatabaseService.getAll();
+        async function renderDatabaseTable() {
+            var foods = await FoodDatabaseService.getAll();
             document.getElementById("db-modal-subtitle").textContent =
                 foods.length + " foods available to the recommendation engine.";
 
@@ -384,24 +398,21 @@
             });
 
             tbody.querySelectorAll(".pantry-toggle").forEach(function (checkbox) {
-                checkbox.addEventListener("change", function () {
-                    PantryService.toggle(checkbox.getAttribute("data-id"));
+                checkbox.addEventListener("change", async function () {
+                    try {
+                        await PantryService.toggle(checkbox.getAttribute("data-id"));
+                        showToast(checkbox.checked ? "Added to pantry." : "Removed from pantry.");
+                    } catch (err) {
+                        checkbox.checked = !checkbox.checked;
+                        showToast(err.message || "Could not update pantry.");
+                    }
                 });
             });
         }
 
-       
         showState("empty");
-
-        
-        window.addEventListener("storage", function (e) {
-            if (e.key === MealStorageService.TODAY_LOG_KEY || e.key === DAILY_GOAL_KEY) {
-                renderRemainingTarget();
-            }
-        });
     });
 
-    
     function round1(n) {
         return Math.round(n * 10) / 10;
     }
@@ -422,6 +433,7 @@
     }
     function showToast(message) {
         var toast = document.getElementById("mm-toast");
+        if (!toast) return;
         toast.textContent = message;
         toast.classList.add("visible");
         clearTimeout(showToast._t);
