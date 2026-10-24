@@ -1,8 +1,7 @@
 (function (global) {
     "use strict";
 
-    var API_BASE =
-    global.MM_API_BASE || "https://macromatch-1.onrender.com/api";
+    var API_BASE = global.MM_API_BASE || "/api";
 
     function buildUrl(path) {
         return API_BASE + path;
